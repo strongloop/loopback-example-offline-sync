@@ -1,7 +1,8 @@
 // dependencies
 var loopback = require('loopback');
 var client = exports.client = loopback();
-var angular = require('angular');
+require('./bower_components/angular/angular.js');
+require('./bower_components/angular-route/angular-route.js');
 
 // data source
 var remote = loopback.createDataSource({
@@ -46,13 +47,14 @@ Object.keys(routes)
 
 // config
 app
-  .config(['$routeProvider', function($routeProvider, $locationProvider) {
+  .config(['$routeProvider', '$locationProvider',
+    function($routeProvider, $locationProvider) {
     // setup routes
     Object.keys(routes)
       .forEach(function(route) {
         var routeDef = routes[route];
         $routeProvider.when(route, routeDef);
       });
-      $routeProvider.otherwise({redirectTo: '/'});
-      $locationProvider.html5Mode(true);
+    $routeProvider.otherwise({redirectTo: '/'});
+    $locationProvider.html5Mode(true);
   }]);

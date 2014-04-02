@@ -1,8 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="app">
 <% include header.ejs %>
-<body ng-app="app">
+<body>
   <div ng-view></div>
+  {{ 'foo' + 'bar' }}
   <% include footer.ejs %>
 </body>
 </html>

@@ -26,6 +26,7 @@ server.enableAuth();
 
 // middleware
 server.use(loopback.static(path.join(__dirname, 'public')));
+server.use(loopback.static(path.join(__dirname, 'bower_components', 'angular-route')));
 server.use(loopback.token());
 server.use(apiPath, loopback.rest());
 server.use('/explorer', explorer(server, {basePath: apiPath}));
