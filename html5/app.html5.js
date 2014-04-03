@@ -19,7 +19,7 @@ User.attachTo(remote);
 Todo.attachTo(remote);
 
 // routes
-var routes = require('./routes.browser.js');
+var routes = require('../api/routes.js');
 
 // angular dependencies
 var dependencies = ['ngRoute'];
