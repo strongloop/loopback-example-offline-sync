@@ -1,14 +1,14 @@
 {
-  "name": "models",
+  "name": "html5",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.html5.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    
-  }
+  "license": "ISC"
 }

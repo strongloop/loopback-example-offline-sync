@@ -1,8 +1,13 @@
 // dependencies
+var LOCAL_CONFIG = require('local.config');
+var CONFIG = require('global.config');
 var loopback = require('loopback');
 var client = exports.client = loopback();
 require('./bower_components/angular/angular.js');
 require('./bower_components/angular-route/angular-route.js');
+
+// config
+console.log(LOCAL_CONFIG);
 
 // data source
 var remote = loopback.createDataSource({
@@ -11,15 +16,15 @@ var remote = loopback.createDataSource({
 });
 
 // models
-var User = require('./models/user');
-var Todo = require('./models/todo');
+var User = require('models/user');
+var Todo = require('models/todo');
 
 // setup the model data sources
 User.attachTo(remote);
 Todo.attachTo(remote);
 
 // routes
-var routes = require('../api/routes.js');
+var routes = CONFIG.routes;
 
 // angular dependencies
 var dependencies = ['ngRoute'];
