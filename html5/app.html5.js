@@ -1,18 +1,16 @@
 // dependencies
 var LOCAL_CONFIG = require('local.config');
-var CONFIG = require('global.config');
 var loopback = require('loopback');
 var client = exports.client = loopback();
+
+// angular.js dependencies
 require('./bower_components/angular/angular.js');
 require('./bower_components/angular-route/angular-route.js');
-
-// config
-console.log(LOCAL_CONFIG);
 
 // data source
 var remote = loopback.createDataSource({
   connector: loopback.Remote,
-  root: 'http://localhost:3000/api'
+  root: LOCAL_CONFIG.serverInfo.root
 });
 
 // models
@@ -24,7 +22,7 @@ User.attachTo(remote);
 Todo.attachTo(remote);
 
 // routes
-var routes = CONFIG.routes;
+var routes = LOCAL_CONFIG.routes;
 
 // angular dependencies
 var dependencies = ['ngRoute'];
@@ -39,7 +37,10 @@ require('./controllers/app.ctrl');
 require('./controllers/home.ctrl');
 require('./controllers/todo.ctrl');
 require('./controllers/user.ctrl');
+require('./controllers/login.ctrl');
+require('./controllers/register.ctrl');
 
+// setup routes
 Object.keys(routes)
   .forEach(function(route) {
     var routeDef = routes[route];
@@ -47,7 +48,7 @@ Object.keys(routes)
       .replace('Ctrl', '.ctrl')
       .toLowerCase();
     var Controller = require('./controllers/' + controllerModule);
-    app.controller(name, Controller);
+    app.controller(Controller.name, Controller);
   });
 
 // config

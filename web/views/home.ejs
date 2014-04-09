@@ -3,14 +3,14 @@
 <% include header.ejs %>
 <body ng-app="app">
 <h1>Welcome to the <%= title %></h1>
-<% if(!me) { %>
-  <a href="/login">Login</a>
-  <a href="/register">Register</a>
-<% } else { %>
+<% if(me) { %>
   <script type="text/javascript">
     var ME = <%= JSON.stringify(me) %>;
     var INITIAL_DATA = ME.initialData;
   </script>
+<% } else { %>
+  <a ng-href="/login">Login</a>
+  <a ng-href="/register">Register</a>
 <% } %>
 <div ng-view></div>
 <% include footer.ejs %>

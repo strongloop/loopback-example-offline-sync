@@ -8,13 +8,15 @@ exports.global = function(env, global) {
 }
 
 exports.local = function(env, global, local) {
-  var db = local.db = {
-    host: process.env.DB_HOST || global.api.host,
-    port: process.env.DB_PORT || 27015
-  };
+  var db = local.db = {};
 
   if(env === 'staging' || env === 'production') {
+    db.host = process.env.DB_HOST || global.api.host;
+    db.port = process.env.DB_PORT || 27015;
+    db.connector = 'mongodb';
     db.user = process.env.DB_USER;
     db.password = process.env.DB_PASSWORD;
+  } else {
+    db.connector = 'memory';
   }
 }

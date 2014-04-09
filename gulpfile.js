@@ -1,81 +1,73 @@
 var gulp = require('gulp');
+var nodemon = require('gulp-nodemon');
 var sh = require('shelljs');
+var async = require('async');
 var path = require('path');
 var fs = require('fs');
-var currentEnv = process.NODE_ENV || 'development';
+var currentEnv = process.env.NODE_ENV || 'development';
 var config = {
   global: {},
   local: {},
   build: {}
 };
+var webProcess;
 
-// npm link ALL packages to each other
-gulp.task('link', function() {
-  findPackages().forEach(function(packageName) {
-    process.chdir(__dirname);
-    var pkg = path.join(__dirname, packageName);
-    sh.exec('npm link ', pkg);
-    process.chdir(pkg);
-    findPackages().forEach(function(otherPackage) {
-      if(otherPackage !== packageName) {
-        var otherPackagePath = path.join('..', otherPackage);
-        sh.exec('npm link ' + otherPackagePath);
-      }
+// add the current directory to the NODE_PATH
+process.env.NODE_PATH = __dirname + ':' + process.env.NODE_PATH;
+
+// run the entire project
+gulp.task('run', function(cb) {
+  nodemon({
+      script: 'app.js',
+      ext: 'html js ejs',
+      ignore: ['node_modules/**', 'node_modules/**/node_modules'],
+      watch: findSrc(),
+      cwd: path.join(__dirname, 'web'),
+      env: {NODE_PATH: process.env.NODE_PATH}
+    })
+    // TODO(ritch) only build the package that changed
+    .on('change', ['build'])
+    .on('restart', function () {
+      console.log('restarted!');
     });
-  });
-});
-
-// run a package
-task('run', function(packageName) {
-  findPackages(packageName).forEach(run);
-});
-
-// run a package
-task('stop', function(packageName) {
-  findPackages(packageName).forEach(stop);
 });
 
 // build a package
-gulp.task('build', function() {
+gulp.task('build', function(cb) {
+  findAndBuild('*', cb);
+});
+
+// default task (for dev)
+gulp.task('default', ['build', 'run']);
+
+function findAndBuild(packageName, cb) {
+  var packages = findPackages(packageName);
   // clean
-  // findPackages(packageName).forEach(clean);
+  // packages.forEach(clean);
 
   // configure all globally
-  findPackages().forEach(globalConfigure);
+  packages.forEach(globalConfigure);
   
   // configure locally
-  findPackages().forEach(localConfigure);
-
-  // configure build
-  findPackages().forEach(buildConfigure);
+  packages.forEach(localConfigure);
 
   // write local config modules
-  findPackages().forEach(writeLocalConfigModule);
+  packages.forEach(writeLocalConfigModule);
 
   // write global config module
   writeGlobalConfigModule();
 
   // build each
-  findPackages().forEach(build);
-});
+  async.each(packages, build, cb);
+}
 
-// debug a package
-task('debug', function(packageName) {
-  findPackages(packageName).forEach(debug);
-});
-
-// define a task for all packages
-function task(name, fn) {
-  findPackages().forEach(function(package) {
-    addTask(name + ':' + package, package);
+function findSrc(package) {
+  var paths = [];
+  findPackages(package).forEach(function(pkg) {
+    paths.push(path.join(__dirname, pkg, '*', '*') + '.js');
+    paths.push(path.join(__dirname, pkg, '*.js'));
   });
-  addTask(name);
-  addTask(name + ':' + '*');
-  function addTask(name, package) {
-    gulp.task(name, function() {
-      fn(package);
-    });
-  }
+  return paths;
 }
 
 var packageCache;
@@ -107,36 +99,21 @@ function listPackages() {
     });
 }
 
-function build(package) {
+function build(package, cb) {
   var buildConfig = config.build[package];
   console.log('building', package);
-  configure(package, 'build');
+  configure(package, 'build', cb);
 }
 
-function run(package, mode) {
-  build(package);
-  var run = pacakgeScript(package, 'run');
-  if(run) {
-    run(currentEnv, config.global, config.local[package]);
-  }
-}
-
-function stop(package) {
-
-}
-
-function debug(package) {
-  
-}
-
-function configure(package, scope) {
-  var configurePackage = pacakgeScript(package, 'configure');
+function configure(package, scope, cb) {
+  var configurePackage = packageScript(package, 'configure');
   var localConfig = config.local[package] || (config.local[package] = {});
-  var buildConfig = config.build[package] || (config.build[package] = {});
   var globalConfig = config.global;
 
   if(configurePackage && configurePackage[scope]) {
-    configurePackage[scope](currentEnv, globalConfig, localConfig, buildConfig);
+    configurePackage[scope](currentEnv, globalConfig, localConfig, cb);
+  } else if(cb) {
+    cb();
   }
 }
 
@@ -148,15 +125,11 @@ function localConfigure(package) {
   configure(package, 'local');
 }
 
-function buildConfigure(package) {
-  configure(package, 'build');
-}
-
 function clean(package) {
   removeConfigModule(package);
 }
 
-function pacakgeScript(package, name) {
+function packageScript(package, name) {
   var file = path.join(__dirname, package, name + '.js');
   if(fs.existsSync(file)) {
     return require(file);
@@ -175,7 +148,7 @@ function writeGlobalConfigModule() {
 function writeConfigModule(root, name, obj) {
   var type = ~name.indexOf('global') ? 'GLOBAL' : 'LOCAL';
   sh.mkdir('-p', path.join(root, 'node_modules'));
-  var src = 'process.' + type + '_CONFIG = ' + JSON.stringify(obj);
+  var src = 'module.exports = process.' + type + '_CONFIG = ' + JSON.stringify(obj);
   src.to(path.join(root, 'node_modules', name));
 }
 

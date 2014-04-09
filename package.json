@@ -30,9 +30,9 @@
     "grunt-contrib-uglify": "~0.4.0",
     "shelljs": "~0.2.6",
     "browserify": "~3.36.0",
-    "gulp": "~3.6.0"
+    "gulp": "~3.6.0",
+    "async": "~0.7.0",
+    "gulp-nodemon": "~1.0.2"
   },
-  "dependencies": {
-
-  }
+  "dependencies": {}
 }

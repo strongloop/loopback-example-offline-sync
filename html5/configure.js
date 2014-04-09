@@ -3,41 +3,69 @@ var path = require('path');
 var pkg = require('./package.json');
 var fs = require('fs');
 var browserify = require('browserify');
+var sh = require('shelljs');
 
 exports.global = function(env, global) {
   // routes
   global.routes = {
     '/': {
       controller: 'HomeCtrl',
-      templateUrl: 'views/welcome'
+      templateUrl: '/views/welcome.html'
     },
     '/me': {
       controller: 'UserCtrl',
-      templateUrl: 'views/me',
+      templateUrl: '/views/me.html',
     },
     '/my/todos': {
       controller: 'TodoCtrl',
-      templateUrl: 'views/todos'
+      templateUrl: '/views/todos.html'
+    },
+    '/login': {
+      controller: 'LoginCtrl',
+      templateUrl: '/views/login.html'
+    },
+    '/register': {
+      controller: 'RegisterCtrl',
+      templateUrl: '/views/register.html'
     }
   };
 
-  global.html5Bundle = path.join(__dirname, 'build', 'bundle.js');
-  global.bundleURL = '/bundle.js';
+  global.bundle = 'bundle.' + pkg.version;
+  if(!isDev(env)) global.bundle += '.min';
+  global.bundle += '.js';
+  global.html5Views = path.join(__dirname, 'views');
+  global.html5Bundle = path.join(__dirname, 'build', global.bundle);
+  global.bundleURL = '/' + global.bundle;
 }
 
 exports.local = function configure(env, global, local) {
+  // NOTE: this config will be available in the browser
   local.serverInfo = {
+    api: global.api,
     root: global.api.protocol
         + '://'
         + global.api.host
         + ':'
         + global.api.port
-        + global.api.root || '/api'
+        + global.api.root
   };
+  local.routes = global.routes;
 }
 
-exports.build = function(env, global, local) {
-  var b = browserify();
-  b.add(path.join(__dirname, pkg.main));
-  b.bundle().pipe(fs.createWriteStream(global.html5Bundle));
+exports.build = function(env, global, local, cb) {
+  var b = browserify({basedir: __dirname});
+  b.add('./' + pkg.main);
+  var out = fs.createWriteStream(global.html5Bundle);
+
+  if(!isDev(env)) {
+    b.transform({
+      global: true
+    }, 'uglifyify');
+  }
+
+  b.bundle().pipe(out);
+}
+
+function isDev(env) {
+  return ~['debug', 'development', 'test'].indexOf(env);
 }
