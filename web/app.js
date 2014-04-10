@@ -1,3 +1,4 @@
+var path = require('path');
 var fs = require('fs');
 var loopback = require('loopback');
 var app = loopback();
@@ -15,20 +16,8 @@ app.locals({
   CONFIG: CONFIG
 });
 
-// load the client app bundle
-var html5AppSrc = fs.readFileSync(CONFIG.html5Bundle, 'utf8');
-
-// serve the browserify bundle from memory
-app.get(CONFIG.bundleURL, function(req, res) {
-  res.setHeader('Content-Type', 'text/javascript');
-  res.send(html5AppSrc);
-});
-
 // view engine
 app.engine('html', require('ejs').renderFile);
-
-// html5 views
-app.use('/views', loopback.static(CONFIG.html5Views));
 
 // html5 routes
 var routes = CONFIG.routes;
@@ -57,6 +46,15 @@ app.get('/', function(req, res) {
 
 // mount the api app
 app.use(api);
+
+// html5 views
+app.use('/views', loopback.static(CONFIG.html5Views));
+
+// static css
+app.use('/css', loopback.static(LOCAL_CONFIG.staticCSS));
+
+// static html5 bundle
+app.use(loopback.static(path.dirname(CONFIG.html5Bundle)));
 
 // start the web server
 app.listen(LOCAL_CONFIG.port, LOCAL_CONFIG.host, function() {

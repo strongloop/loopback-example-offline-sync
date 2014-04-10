@@ -19,6 +19,7 @@ var Todo = require('models/todo');
 
 // setup the model data sources
 User.attachTo(remote);
+debugger;
 Todo.attachTo(remote);
 
 // routes
