@@ -19,8 +19,10 @@ var Todo = require('models/todo');
 
 // setup the model data sources
 User.attachTo(remote);
-debugger;
+client.model(Todo);
+console.log('====== ATTACHING Todo ======');
 Todo.attachTo(remote);
+console.log('======= Todo ATTACHED =======');
 
 // routes
 var routes = LOCAL_CONFIG.routes;
