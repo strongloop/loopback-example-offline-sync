@@ -64,6 +64,9 @@ exports.build = function(env, global, local, cb) {
   }
 
   b.bundle().pipe(out);
+
+  out.on('error', cb);
+  out.on('close', cb);
 }
 
 function isDev(env) {

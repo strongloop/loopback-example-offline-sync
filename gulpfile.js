@@ -20,13 +20,16 @@ gulp.task('run', function(cb) {
   nodemon({
       script: 'app.js',
       ext: 'html js ejs',
-      ignore: ['node_modules/**', 'node_modules/**/node_modules'],
+      ignore: ['node_modules/**', 'node_modules/**/node_modules', 'build/**'],
       watch: findSrc(),
       cwd: path.join(__dirname, 'web'),
-      env: {NODE_PATH: process.env.NODE_PATH}
+      env: {NODE_PATH: process.env.NODE_PATH},
+      nodeArgs: ['--debug']
     })
-    // TODO(ritch) only build the package that changed
-    .on('change', ['build'])
+    .on('change', function() {
+      // TODO(ritch) only build the package that changed
+      findAndBuild('*');
+    })
     .on('restart', function () {
       console.log('restarted!');
     });
@@ -47,7 +50,7 @@ function findAndBuild(packageName, cb) {
 
   // configure all globally
   packages.forEach(globalConfigure);
-  
+
   // configure locally
   packages.forEach(localConfigure);
 

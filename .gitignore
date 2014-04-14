@@ -21,3 +21,5 @@ global.config.js
 local.config.js
 
 .DS_Store
+
+build
