@@ -20,9 +20,7 @@ var Todo = require('models/todo');
 // setup the model data sources
 User.attachTo(remote);
 client.model(Todo);
-console.log('====== ATTACHING Todo ======');
 Todo.attachTo(remote);
-console.log('======= Todo ATTACHED =======');
 
 // routes
 var routes = LOCAL_CONFIG.routes;
@@ -42,6 +40,10 @@ require('./controllers/todo.ctrl');
 require('./controllers/user.ctrl');
 require('./controllers/login.ctrl');
 require('./controllers/register.ctrl');
+
+// attach models to the app
+app.model(Todo);
+app.model(User);
 
 // setup routes
 Object.keys(routes)
