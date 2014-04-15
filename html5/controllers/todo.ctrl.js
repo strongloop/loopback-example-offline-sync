@@ -11,11 +11,18 @@ function TodoCtrl($scope, $routeParams, $filter) {
 	$scope.editedTodo = null;
 
 	function onChange() {
+    console.log('change event');
     Todo.stats(function(err, stats) {
       if(err) return error(err);
       $scope.stats = stats;
     });
+    Todo.find(function(err, todos) {
+      $scope.todos = todos;
+      $scope.$apply();
+    });
   }
+
+  onChange();
 
   function error() {
     //TODO error handling
@@ -25,7 +32,7 @@ function TodoCtrl($scope, $routeParams, $filter) {
     if(err) error(err);
   }
 
-  Todo.on('change', onChange);
+  Todo.on('changed', onChange);
 
 	// Monitor the current route for changes and adjust the filter accordingly.
 	$scope.$on('$routeChangeSuccess', function () {
@@ -37,8 +44,9 @@ function TodoCtrl($scope, $routeParams, $filter) {
 	});
 
 	$scope.addTodo = function () {
-		var newTodo = $scope.newTodo = new Todo({title: newTodo});
-    newTodo.save(errorCallback);
+		var todo = new Todo({title: $scope.newTodo});
+    todo.save(errorCallback);
+    $scope.newTodo = '';
 	};
 
 	$scope.editTodo = function (todo) {

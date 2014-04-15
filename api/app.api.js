@@ -18,12 +18,14 @@ var Todo = require('models/todo');
 // setup the model data sources
 User.attachTo(db);
 Todo.attachTo(db);
+server.model(User);
+server.model(Todo);
 
 // root api path
 var apiPath = CONFIG.api.root;
 
 // enable authentication
-server.enableAuth();
+// server.enableAuth();
 
 // middleware
 server.use(loopback.token());

@@ -42,7 +42,7 @@ exports.local = function configure(env, global, local) {
   // NOTE: this config will be available in the browser
   local.serverInfo = {
     api: global.api,
-    root: global.api.protocol
+    url: global.api.protocol
         + '://'
         + global.api.host
         + ':'
