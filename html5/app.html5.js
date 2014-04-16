@@ -16,6 +16,7 @@ var remote = loopback.createDataSource({
 // models
 var User = require('models/user');
 var Todo = require('models/todo');
+var LocalTodo = Todo.extend('LocalTodo');
 
 // routes
 var routes = LOCAL_CONFIG.routes;
@@ -43,6 +44,8 @@ client.model(User);
 // setup the model data sources
 User.attachTo(remote);
 Todo.attachTo(remote);
+
+// setup model replication
 
 // setup routes
 Object.keys(routes)

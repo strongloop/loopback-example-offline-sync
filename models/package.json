@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    
+    "loopback": "strongloop/loopback#feature/replication"
   }
 }

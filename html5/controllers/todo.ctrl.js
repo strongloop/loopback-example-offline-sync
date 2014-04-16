@@ -2,8 +2,6 @@ module.exports = TodoCtrl;
 var Todo = require('models/todo');
 var async = require('async');
 
-// TodoCtrl.$inject = [];
-
 function TodoCtrl($scope, $routeParams, $filter) {
 	var todos = $scope.todos = [];
 
@@ -11,7 +9,6 @@ function TodoCtrl($scope, $routeParams, $filter) {
 	$scope.editedTodo = null;
 
 	function onChange() {
-    console.log('change event');
     Todo.stats(function(err, stats) {
       if(err) return error(err);
       $scope.stats = stats;
@@ -24,8 +21,9 @@ function TodoCtrl($scope, $routeParams, $filter) {
 
   onChange();
 
-  function error() {
+  function error(err) {
     //TODO error handling
+    throw err;
   }
 
   function errorCallback(err) {
