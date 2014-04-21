@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "async": "~0.7.0",
-    "loopback": "strongloop/loopback#feature/replication"
+    "loopback": "~1.8.0"
   }
 }

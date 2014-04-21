@@ -43,7 +43,7 @@ function TodoCtrl($scope, $routeParams, $filter) {
 
 	$scope.addTodo = function () {
 		var todo = new Todo({title: $scope.newTodo});
-    todo.save(errorCallback);
+    todo.save(onChange);
     $scope.newTodo = '';
 	};
 
@@ -52,6 +52,13 @@ function TodoCtrl($scope, $routeParams, $filter) {
 		// Clone the original todo to restore it on demand.
 		$scope.originalTodo = angular.extend({}, todo);
 	};
+
+  $scope.todoCompleted = function(todo) {
+    todo.completed = true;
+    Todo.upsert(todo, function() {
+      onChange();
+    });
+  }
 
 	$scope.doneEditing = function (todo) {
 		$scope.editedTodo = null;
@@ -68,6 +75,7 @@ function TodoCtrl($scope, $routeParams, $filter) {
 	};
 
 	$scope.removeTodo = function (todo) {
+    todo = new Todo(todo);
     todo.remove(errorCallback);
 	};
 
