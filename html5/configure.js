@@ -55,6 +55,11 @@ exports.local = function configure(env, global, local) {
 exports.build = function(env, global, local, cb) {
   var b = browserify({basedir: __dirname});
   b.add('./' + pkg.main);
+
+  var bundleDir = path.dirname(global.html5Bundle);
+  if (!fs.existsSync(bundleDir))
+    fs.mkdirSync(bundleDir);
+
   var out = fs.createWriteStream(global.html5Bundle);
 
   if(!isDev(env)) {
