@@ -7,16 +7,19 @@ var client = exports.client = loopback();
 require('./bower_components/angular/angular.js');
 require('./bower_components/angular-route/angular-route.js');
 
-// data source
+// data sources
 var remote = loopback.createDataSource({
   connector: loopback.Remote,
   url: LOCAL_CONFIG.serverInfo.url
 });
+var memory = loopback.createDataSource({
+  connector: loopback.Memory
+});
 
 // models
 var User = require('models/user');
-var Todo = require('models/todo');
-var LocalTodo = Todo.extend('LocalTodo');
+var RemoteTodo = require('models/todo');
+var LocalTodo = RemoteTodo.extend('LocalTodo');
 
 // routes
 var routes = LOCAL_CONFIG.routes;
@@ -26,6 +29,9 @@ var dependencies = ['ngRoute'];
 
 // angular app
 var app = module.exports = angular.module('app', dependencies);
+
+// providers
+app.value('Todo', LocalTodo);
 
 // setup controllers
 // must require controllers in order for browserify
@@ -37,15 +43,15 @@ require('./controllers/user.ctrl');
 require('./controllers/login.ctrl');
 require('./controllers/register.ctrl');
 
-// attach models to the loopback client
-client.model(Todo);
-client.model(User);
-
 // setup the model data sources
 User.attachTo(remote);
-Todo.attachTo(remote);
+RemoteTodo.attachTo(remote);
+LocalTodo.attachTo(memory);
 
 // setup model replication
+setInterval(function() {
+  LocalTodo.replicate(RemoteTodo);
+}, 1000);
 
 // setup routes
 Object.keys(routes)

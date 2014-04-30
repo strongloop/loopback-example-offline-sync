@@ -1,8 +1,8 @@
 module.exports = TodoCtrl;
-var Todo = require('models/todo');
+var app = require('../app.html5');
 var async = require('async');
 
-function TodoCtrl($scope, $routeParams, $filter) {
+function TodoCtrl($scope, $routeParams, $filter, Todo) {
 	var todos = $scope.todos = [];
 
 	$scope.newTodo = '';

@@ -4,11 +4,14 @@ var async = require('async');
 var Todo = module.exports = loopback.DataModel.extend('Todo', {
   title: String,
   completed: {type: Boolean, default: false}
+}, {
+  trackChanges: true
 });
 
 Todo.stats = function(filter, cb) {
   var stats = {};
-
+  cb = arguments[arguments.length - 1];
+  
   async.parallel([
     countComplete,
     count

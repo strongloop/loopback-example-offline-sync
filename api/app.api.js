@@ -21,6 +21,9 @@ Todo.attachTo(db);
 server.model(User);
 server.model(Todo);
 
+// TODO(ritch) this should be unecessary soon....
+server.model(Todo.getChangeModel());
+
 // root api path
 var apiPath = CONFIG.api.root;
 
