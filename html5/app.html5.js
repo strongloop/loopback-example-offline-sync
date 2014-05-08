@@ -13,7 +13,8 @@ var remote = loopback.createDataSource({
   url: LOCAL_CONFIG.serverInfo.url
 });
 var memory = loopback.createDataSource({
-  connector: loopback.Memory
+  connector: loopback.Memory,
+  localStorage: 'todo-db'
 });
 
 // models
@@ -49,9 +50,32 @@ RemoteTodo.attachTo(remote);
 LocalTodo.attachTo(memory);
 
 // setup model replication
-setInterval(function() {
+// setInterval(sync, 10000);
+
+function sync() {
+  console.log('syncing...');
   LocalTodo.replicate(RemoteTodo);
-}, 1000);
+  RemoteTodo.replicate(LocalTodo);
+}
+
+window.sync = sync;
+
+// sync the initial data
+sync();
+
+window.isConnected = true;
+
+window.connected = function connected() {
+  console.log('isConnected?', window.isConnected);
+  return window.isConnected;
+}
+
+// sync local changes if connected
+LocalTodo.on('changed', function() {
+  if(connected()) {
+    sync();
+  }
+});
 
 // setup routes
 Object.keys(routes)

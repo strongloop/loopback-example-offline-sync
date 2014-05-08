@@ -49,8 +49,6 @@ function TodoCtrl($scope, $routeParams, $filter, Todo) {
 
 	$scope.editTodo = function (todo) {
 		$scope.editedTodo = todo;
-		// Clone the original todo to restore it on demand.
-		$scope.originalTodo = angular.extend({}, todo);
 	};
 
   $scope.todoCompleted = function(todo) {
@@ -66,16 +64,12 @@ function TodoCtrl($scope, $routeParams, $filter, Todo) {
 
 		if (!todo.title) {
 			$scope.removeTodo(todo);
-		}
-	};
-
-	$scope.revertEditing = function (todo) {
-		// todos[todos.indexOf(todo)] = $scope.originalTodo;
-		// $scope.doneEditing($scope.originalTodo);
+		} else {
+      todo.save();
+    }
 	};
 
 	$scope.removeTodo = function (todo) {
-    todo = new Todo(todo);
     todo.remove(errorCallback);
 	};
 
@@ -92,4 +86,20 @@ function TodoCtrl($scope, $routeParams, $filter, Todo) {
       });
     });
 	};
+
+  $scope.sync = function() {
+    window.sync();
+  }
+
+  $scope.connected = function() {
+    return window.connected();
+  }
+
+  $scope.connect = function() {
+    window.isConnected = true;
+  }
+
+  $scope.disconnect = function() {
+    window.isConnected = false;
+  }
 }

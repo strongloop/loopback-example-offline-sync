@@ -31,6 +31,8 @@ var apiPath = CONFIG.api.root;
 // server.enableAuth();
 
 // middleware
+server.use(loopback.logger('dev'));
 server.use(loopback.token());
 server.use(apiPath, loopback.rest());
 server.use('/explorer', explorer(server, {basePath: apiPath}));
+

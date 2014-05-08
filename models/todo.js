@@ -8,6 +8,11 @@ var Todo = module.exports = loopback.DataModel.extend('Todo', {
   trackChanges: true
 });
 
+Todo.beforeSave = function(next, model) {
+  if(!model.id) model.id = Math.floor(Math.random() * 10000);
+  next();
+}
+
 Todo.stats = function(filter, cb) {
   var stats = {};
   cb = arguments[arguments.length - 1];
