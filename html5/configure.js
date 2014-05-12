@@ -27,6 +27,10 @@ exports.global = function(env, global) {
     '/register': {
       controller: 'RegisterCtrl',
       templateUrl: '/views/register.html'
+    },
+    '/changes': {
+      controller: 'ChangeCtrl',
+      templateUrl: '/views/changes.html'
     }
   };
 

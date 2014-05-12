@@ -2,6 +2,7 @@ var loopback = require('loopback');
 var async = require('async');
 
 var Todo = module.exports = loopback.DataModel.extend('Todo', {
+  id: {id: true, type: String},
   title: String,
   completed: {type: Boolean, default: false}
 }, {
@@ -9,7 +10,7 @@ var Todo = module.exports = loopback.DataModel.extend('Todo', {
 });
 
 Todo.beforeSave = function(next, model) {
-  if(!model.id) model.id = Math.floor(Math.random() * 10000);
+  if(!model.id) model.id = 't-' + Math.floor(Math.random() * 10000).toString();
   next();
 }
 

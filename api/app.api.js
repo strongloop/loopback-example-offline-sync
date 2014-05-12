@@ -9,7 +9,11 @@ var LOCAL_CONFIG = require('local.config');
 var server = module.exports = loopback();
 
 // data source
-var db = loopback.createDataSource(LOCAL_CONFIG.db);
+// var db = loopback.createDataSource(LOCAL_CONFIG.db);
+var db = loopback.createDataSource({
+  connector: require('loopback-connector-mongodb'),
+  database: 'todo-example'
+});
 
 // models
 var User = require('models/user');

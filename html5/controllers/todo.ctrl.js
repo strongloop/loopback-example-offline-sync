@@ -31,6 +31,7 @@ function TodoCtrl($scope, $routeParams, $filter, Todo) {
   }
 
   Todo.on('changed', onChange);
+  Todo.on('deleted', onChange);
 
 	// Monitor the current route for changes and adjust the filter accordingly.
 	$scope.$on('$routeChangeSuccess', function () {
@@ -97,6 +98,7 @@ function TodoCtrl($scope, $routeParams, $filter, Todo) {
 
   $scope.connect = function() {
     window.isConnected = true;
+    sync();
   }
 
   $scope.disconnect = function() {

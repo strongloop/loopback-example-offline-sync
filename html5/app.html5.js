@@ -19,8 +19,8 @@ var memory = loopback.createDataSource({
 
 // models
 var User = require('models/user');
-var RemoteTodo = require('models/todo');
-var LocalTodo = RemoteTodo.extend('LocalTodo');
+var RemoteTodo = window.RemoteTodo = require('models/todo');
+var LocalTodo = window.LocalTodo = RemoteTodo.extend('LocalTodo');
 
 // routes
 var routes = LOCAL_CONFIG.routes;
@@ -43,25 +43,12 @@ require('./controllers/todo.ctrl');
 require('./controllers/user.ctrl');
 require('./controllers/login.ctrl');
 require('./controllers/register.ctrl');
+require('./controllers/change.ctrl');
 
 // setup the model data sources
-User.attachTo(remote);
 RemoteTodo.attachTo(remote);
 LocalTodo.attachTo(memory);
 
-// setup model replication
-// setInterval(sync, 10000);
-
-function sync() {
-  console.log('syncing...');
-  LocalTodo.replicate(RemoteTodo);
-  RemoteTodo.replicate(LocalTodo);
-}
-
-window.sync = sync;
-
-// sync the initial data
-sync();
 
 window.isConnected = true;
 
@@ -70,12 +57,22 @@ window.connected = function connected() {
   return window.isConnected;
 }
 
-// sync local changes if connected
-LocalTodo.on('changed', function() {
+// setup model replication
+function sync() {
   if(connected()) {
-    sync();
+    console.log('syncing...');
+    LocalTodo.replicate(RemoteTodo);
+    RemoteTodo.replicate(LocalTodo);
   }
-});
+}
+
+window.sync = sync;
+
+// sync the initial data
+sync();
+
+// sync local changes if connected
+LocalTodo.getChangeModel().on('changed', sync);
 
 // setup routes
 Object.keys(routes)

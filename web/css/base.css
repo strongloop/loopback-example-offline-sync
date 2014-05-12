@@ -554,3 +554,11 @@ hr {
 		margin: 130px auto 40px auto;
 	}
 }
+
+/* changes */
+
+table, table td, table th {
+	outline: solid 1px #ccc;
+	padding: 5px;
+	text-align: center;
+}

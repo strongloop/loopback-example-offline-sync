@@ -12,5 +12,7 @@
     "loopback": "~1.7.4",
     "loopback-explorer": "~1.1.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "loopback-connector-mongodb": "^1.2.4"
+  }
 }
