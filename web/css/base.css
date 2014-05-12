@@ -562,3 +562,22 @@ table, table td, table th {
 	padding: 5px;
 	text-align: center;
 }
+
+/* debug footer */
+
+.debug button {
+	background: #6c615c;
+	padding: 5px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.debug button:active {
+	background: #000;
+}
+
+
+.debug {
+	border: dashed 2px #6c615c;
+	padding: 10px;
+}

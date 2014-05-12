@@ -68,9 +68,6 @@ function sync() {
 
 window.sync = sync;
 
-// sync the initial data
-sync();
-
 // sync local changes if connected
 LocalTodo.getChangeModel().on('changed', sync);
 

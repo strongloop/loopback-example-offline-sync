@@ -2,7 +2,10 @@
 <p>
 A list of all changes made to models in local storage.
 </p>
-<table>
+<strong ng-if="changes.length === 0">
+  No local changes have been made.
+</strong>
+<table ng-if="changes.length">
   <tr>
     <th>Model ID</th>
     <th>Type</th>
@@ -19,12 +22,12 @@ A list of all changes made to models in local storage.
   </tr>
 </table>
 
-<div ng-if="diff.deltas.length">
-<h1>Deltas</h1>
+<h1>Local to Server Deltas</h1>
 <p>
-Below are models that differ on the server.
+  Below is list of changes required to replicate local data to the server.
 </p>
-<table>
+<strong ng-if="diff.deltas.length === 0">No changes required to replicate the local data to the server.</strong>
+<table ng-if="diff.deltas.length">
   <tr>
     <th>Model ID</th>
     <th>Revision</th>
@@ -36,12 +39,15 @@ Below are models that differ on the server.
     <td>{{delta.prev}}</td>
   </tr>
 </table>
-</div>
-<h1 ng-if="diff.deltas.length === 0">No Deltas</h1>
 
 <h1>Local Storage Data</h1>
-<a href="#" ng-click="clearLocalStorage()">Clear Local Storage</a>
-<table>
+<p>
+  <a href="#" ng-click="clearLocalStorage()">Clear Local Storage</a>
+</p>
+<strong ng-if="todos.length === 0">
+  There is no data in local storage.
+</strong>
+<table ng-if="todos.length">
   <tr>
     <th>Todo ID</th>
     <th>Title</th>

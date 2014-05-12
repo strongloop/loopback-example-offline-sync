@@ -8,6 +8,9 @@ function TodoCtrl($scope, $routeParams, $filter, Todo) {
 	$scope.newTodo = '';
 	$scope.editedTodo = null;
 
+  // sync the initial data
+  sync();
+
 	function onChange() {
     Todo.stats(function(err, stats) {
       if(err) return error(err);
