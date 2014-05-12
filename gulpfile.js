@@ -15,6 +15,16 @@ var webProcess;
 // add the current directory to the NODE_PATH
 process.env.NODE_PATH = __dirname + ':' + process.env.NODE_PATH;
 
+// install deps of the packages
+gulp.task('install', function() {
+  var pwd = process.cwd();
+  findPackages().forEach(function(pkg) {
+    process.chdir(path.join(pwd, pkg));
+    sh.exec('npm install');
+  });
+  process.chdir(pwd);
+});
+
 // run the entire project
 gulp.task('run', function(cb) {
   nodemon({
