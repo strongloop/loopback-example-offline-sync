@@ -16,6 +16,10 @@ exports.global = function(env, global) {
       controller: 'UserCtrl',
       templateUrl: '/views/me.html',
     },
+    '/my/todos/:status': {
+      controller: 'TodoCtrl',
+      templateUrl: '/views/todos.html'
+    },
     '/my/todos': {
       controller: 'TodoCtrl',
       templateUrl: '/views/todos.html'

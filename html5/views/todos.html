@@ -27,16 +27,16 @@
     </span>
     <ul id="filters">
       <li>
-        <a ng-class="{selected: location.path() == '/'} " href="#/">All</a>
+        <a ng-class="{selected: loc.path() == '/my/todos'} " href="/my/todos">All</a>
       </li>
       <li>
-        <a ng-class="{selected: location.path() == '/active'}" href="#/active">Active</a>
+        <a ng-class="{selected: loc.path() == '/my/todos/active'}" href="/my/todos/active">Active</a>
       </li>
       <li>
-        <a ng-class="{selected: location.path() == '/completed'}" href="#/completed">Completed</a>
+        <a ng-class="{selected: loc.path() == '/my/todos/completed'}" href="/my/todos/completed">Completed</a>
       </li>
     </ul>
-    <button id="clear-completed" ng-click="clearCompletedTodos()" ng-show="remainingCount < todos.length">Clear completed ({{todos.length - remainingCount}})</button>
+    <button id="clear-completed" ng-click="clearCompletedTodos()" ng-show="stats.remaining < todos.length">Clear completed ({{stats.completed}})</button>
   </footer>
 </section>
 <footer id="info">

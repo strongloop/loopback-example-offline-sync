@@ -17,6 +17,7 @@ Todo.beforeSave = function(next, model) {
 Todo.stats = function(filter, cb) {
   var stats = {};
   cb = arguments[arguments.length - 1];
+  var Todo = this;
   
   async.parallel([
     countComplete,
@@ -28,7 +29,7 @@ Todo.stats = function(filter, cb) {
   });
 
   function countComplete(cb) {
-    Todo.count({where: {completed: true}}, function(err, count) {
+    Todo.count({completed: true}, function(err, count) {
       stats.completed = count;
       cb(err);
     });

@@ -2,7 +2,7 @@ module.exports = TodoCtrl;
 var app = require('../app.html5');
 var async = require('async');
 
-function TodoCtrl($scope, $routeParams, $filter, Todo) {
+function TodoCtrl($scope, $routeParams, $filter, Todo, $location) {
 	var todos = $scope.todos = [];
 
 	$scope.newTodo = '';
@@ -11,12 +11,17 @@ function TodoCtrl($scope, $routeParams, $filter, Todo) {
   // sync the initial data
   sync();
 
+  // the location service
+  $scope.loc = $location;
+
 	function onChange() {
     Todo.stats(function(err, stats) {
       if(err) return error(err);
       $scope.stats = stats;
     });
-    Todo.find(function(err, todos) {
+    Todo.find({
+      where: $scope.statusFilter
+    },function(err, todos) {
       $scope.todos = todos;
       $scope.$apply();
     });
@@ -39,7 +44,6 @@ function TodoCtrl($scope, $routeParams, $filter, Todo) {
 	// Monitor the current route for changes and adjust the filter accordingly.
 	$scope.$on('$routeChangeSuccess', function () {
 		var status = $scope.status = $routeParams.status || '';
-
 		$scope.statusFilter = (status === 'active') ?
 			{ completed: false } : (status === 'completed') ?
 			{ completed: true } : null;
@@ -47,7 +51,7 @@ function TodoCtrl($scope, $routeParams, $filter, Todo) {
 
 	$scope.addTodo = function () {
 		var todo = new Todo({title: $scope.newTodo});
-    todo.save(onChange);
+    todo.save();
     $scope.newTodo = '';
 	};
 
@@ -57,9 +61,7 @@ function TodoCtrl($scope, $routeParams, $filter, Todo) {
 
   $scope.todoCompleted = function(todo) {
     todo.completed = true;
-    Todo.upsert(todo, function() {
-      onChange();
-    });
+    todo.save();
   }
 
 	$scope.doneEditing = function (todo) {
@@ -78,7 +80,7 @@ function TodoCtrl($scope, $routeParams, $filter, Todo) {
 	};
 
 	$scope.clearCompletedTodos = function () {
-    Todo.destroyAll({where: {completed: true}}, errorCallback);
+    Todo.destroyAll({completed: true}, onChange);
 	};
 
 	$scope.markAll = function (completed) {
