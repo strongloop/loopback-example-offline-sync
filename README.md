@@ -10,10 +10,12 @@ An example running LoopBack in the browser and server.
 
 2. `cd loopback-example-full-stack`
 
-3. `npm install`
+3. `npm install` - install the root package dependencies
 
-4. `npm install gulp -g` (unless you already have gulp installed)
+4. `npm install gulp -g` - skip if you have gulp installed
 
-5. `gulp install` - installs the sub package dependencies
+5. `gulp install` - install the sub package dependencies
 
-6. `gulp` - builds and runs the entire project in development mode
+6. `gulp` - build and run the entire project in development mode
+
+7. `open http://localhost:3000` - point a browser at the running app
