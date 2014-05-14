@@ -95,18 +95,55 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location) {
 
   $scope.sync = function() {
     window.sync();
-  }
+  };
 
   $scope.connected = function() {
     return window.connected();
-  }
+  };
 
   $scope.connect = function() {
     window.isConnected = true;
     sync();
-  }
+  };
 
   $scope.disconnect = function() {
     window.isConnected = false;
+  };
+
+  Todo.on('conflicts', function(conflicts) {
+    $scope.localConflicts = conflicts;
+    conflicts.forEach(function(conflict) {
+      console.log(conflict);
+      conflict.type(function(err, type) {
+        conflict.type = type;
+        conflict.models(function(err, source, target) {
+          conflict.source = source;
+          conflict.target = target;
+          $scope.$apply();
+        });
+        conflict.changes(function(err, source, target) {
+          conflict.sourceChange = source;
+          conflict.targetChange = target;
+          $scope.$apply();
+        });
+      });
+    });
+  });
+
+  $scope.resolveUsingSource = function(conflict) {
+    conflict.resolve();
   }
+
+  $scope.resolveUsingTarget = function(conflict, target) {
+    Todo.upsert(target.getId(), target);
+  }
+
+  // RemoteTodo.on('conflicts', function(conflicts) {
+  //   $scope.remoteConflicts = conflicts;
+  //   conflicts.forEach(function(conflict) {
+  //     conflict.fetch(function() {
+  //       $scope.$apply();
+  //     });
+  //   });
+  // });
 }

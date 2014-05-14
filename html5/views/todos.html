@@ -1,3 +1,24 @@
+<section id="local-conflicts">
+  <h1>Local Conflicts</h1>
+  <ul>
+    <li ng-repeat="conflict in localConflicts">
+      {{conflict.sourceChange.modelId}}
+      Local Change: {{conflict.sourceChange.type()}}<br />
+      Server Change: {{conflict.targetChange.type()}}<br />
+      <div ng-if="conflict.source">
+        Title: {{conflict.source.title}}
+        Completed: {{conflict.source.completed}}
+        <button ng-click="resolveUsingSource(conflict)">Use Local Version</button>
+      </div>
+      <div ng-if="conflict.target">
+        Title: {{conflict.target.title}}
+        Completed: {{conflict.target.completed}}
+        <button ng-click="resolveUsingSource(conflict, conflict.target)">Use Server Version</button>
+      </div>
+    </li>
+  </ul>
+</section>
+
 <section id="todoapp">
   <header id="header">
     <h1>todos</h1>

@@ -59,3 +59,21 @@ A list of all changes made to models in local storage.
     <td>{{todo.completed}}</td>
   </tr>
 </table>
+
+<h1>Local to Server Conflicts</h1>
+<p>
+  Below is list of changes that cannot be replicated to the server.
+</p>
+<strong ng-if="diff.conflicts.length === 0">No conflicts...</strong>
+<table ng-if="diff.conflicts.length">
+  <tr>
+    <th>Model ID</th>
+    <th>Revision</th>
+    <th>Prev Revision</th>
+  </tr>
+  <tr ng-repeat="conflict in diff.conflicts">
+    <td>{{conflict.modelId}}</td>
+    <td>{{conflict.rev}}</td>
+    <td>{{conflict.prev}}</td>
+  </tr>
+</table>
