@@ -4,7 +4,8 @@ var async = require('async');
 var Todo = module.exports = loopback.DataModel.extend('Todo', {
   id: {id: true, type: String},
   title: String,
-  completed: {type: Boolean, default: false}
+  completed: {type: Boolean, default: false},
+  created: {type: Number, default: Date.now}
 }, {
   trackChanges: true
 });

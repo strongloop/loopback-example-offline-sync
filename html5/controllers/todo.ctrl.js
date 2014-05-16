@@ -20,7 +20,8 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location) {
       $scope.stats = stats;
     });
     Todo.find({
-      where: $scope.statusFilter
+      where: $scope.statusFilter,
+      sort: 'order DESC'
     },function(err, todos) {
       $scope.todos = todos;
       $scope.$apply();
@@ -46,7 +47,7 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location) {
 		var status = $scope.status = $routeParams.status || '';
 		$scope.statusFilter = (status === 'active') ?
 			{ completed: false } : (status === 'completed') ?
-			{ completed: true } : null;
+			{ completed: true } : {};
 	});
 
 	$scope.addTodo = function () {
@@ -134,8 +135,12 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location) {
     conflict.resolve();
   }
 
-  $scope.resolveUsingTarget = function(conflict, target) {
-    Todo.upsert(target.getId(), target);
+  $scope.resolveUsingTarget = function(conflict) {
+    if(conflict.targetChange.type() === 'delete') {
+      conflict.SourceModel.deleteById(conflict.modelId);
+    } else {
+      conflict.SourceModel.upsert(conflict.modelId, conflict.target);
+    }
   }
 
   // RemoteTodo.on('conflicts', function(conflicts) {
