@@ -93,7 +93,7 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location, sync) {
 	};
 
   $scope.sync = function() {
-    sync(diff);
+    sync();
   };
 
   $scope.connected = function() {
