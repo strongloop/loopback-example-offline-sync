@@ -2,6 +2,7 @@
 var LOCAL_CONFIG = require('local.config');
 var loopback = require('loopback');
 var client = exports.client = loopback();
+var async = require('async');
 
 // angular.js dependencies
 require('./bower_components/angular/angular.js');
@@ -33,6 +34,7 @@ var app = module.exports = angular.module('app', dependencies);
 
 // providers
 app.value('Todo', LocalTodo);
+app.value('sync', sync);
 
 // setup controllers
 // must require controllers in order for browserify
@@ -58,15 +60,15 @@ window.connected = function connected() {
 }
 
 // setup model replication
-function sync() {
+function sync(cb) {
   if(connected()) {
     console.log('syncing...');
-    LocalTodo.replicate(RemoteTodo);
-    RemoteTodo.replicate(LocalTodo);
+    async.series([
+      RemoteTodo.replicate.bind(RemoteTodo, LocalTodo),
+      LocalTodo.replicate.bind(LocalTodo, RemoteTodo),
+    ], cb || noop);
   }
 }
-
-window.sync = sync;
 
 // sync local changes if connected
 LocalTodo.getChangeModel().on('changed', sync);
@@ -95,3 +97,5 @@ app
     $routeProvider.otherwise({redirectTo: '/'});
     $locationProvider.html5Mode(true);
   }]);
+
+function noop(){};

@@ -1,7 +1,7 @@
 module.exports = ChangeCtrl;
 
-function ChangeCtrl($scope, $routeParams, $filter, Todo) {
-	Todo.changes(function(err, changes) {
+function ChangeCtrl($scope, $routeParams, $filter, Todo, sync) {
+	Todo.getChangeModel().find(function(err, changes) {
 		$scope.changes = changes;
 		$scope.$apply();
 

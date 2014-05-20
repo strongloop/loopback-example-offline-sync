@@ -592,3 +592,5 @@ table, table td, table th {
 .conflicts button:active {
 	background: #000;
 }
+
+.deltas {background: red !important;}

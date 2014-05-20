@@ -2,14 +2,14 @@ module.exports = TodoCtrl;
 var app = require('../app.html5');
 var async = require('async');
 
-function TodoCtrl($scope, $routeParams, $filter, Todo, $location) {
+function TodoCtrl($scope, $routeParams, $filter, Todo, $location, sync) {
 	var todos = $scope.todos = [];
 
 	$scope.newTodo = '';
 	$scope.editedTodo = null;
 
   // sync the initial data
-  sync();
+  sync(onChange);
 
   // the location service
   $scope.loc = $location;
@@ -22,13 +22,11 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location) {
     Todo.find({
       where: $scope.statusFilter,
       sort: 'order DESC'
-    },function(err, todos) {
+    }, function(err, todos) {
       $scope.todos = todos;
       $scope.$apply();
     });
   }
-
-  onChange();
 
   function error(err) {
     //TODO error handling
@@ -95,7 +93,7 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location) {
 	};
 
   $scope.sync = function() {
-    window.sync();
+    sync(diff);
   };
 
   $scope.connected = function() {
@@ -114,12 +112,12 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location) {
   Todo.on('conflicts', function(conflicts) {
     $scope.localConflicts = conflicts;
     conflicts.forEach(function(conflict) {
-      console.log(conflict);
       conflict.type(function(err, type) {
         conflict.type = type;
         conflict.models(function(err, source, target) {
           conflict.source = source;
           conflict.target = target;
+          conflict.manual = new conflict.SourceModel(source || target);
           $scope.$apply();
         });
         conflict.changes(function(err, source, target) {
@@ -132,23 +130,28 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location) {
   });
 
   $scope.resolveUsingSource = function(conflict) {
-    conflict.resolve();
+    conflict.resolve(refreshConflicts);
   }
 
   $scope.resolveUsingTarget = function(conflict) {
     if(conflict.targetChange.type() === 'delete') {
-      conflict.SourceModel.deleteById(conflict.modelId);
+      conflict.SourceModel.deleteById(conflict.modelId, refreshConflicts);
     } else {
-      conflict.SourceModel.upsert(conflict.modelId, conflict.target);
+      var m = new conflict.SourceModel(conflict.target);
+      m.save(refreshConflicts);
     }
   }
 
-  // RemoteTodo.on('conflicts', function(conflicts) {
-  //   $scope.remoteConflicts = conflicts;
-  //   conflicts.forEach(function(conflict) {
-  //     conflict.fetch(function() {
-  //       $scope.$apply();
-  //     });
-  //   });
-  // });
+  $scope.resolveManually = function(conflict) {
+    conflict.manual.save(function(err) {
+      if(err) return errorCallback(err);
+      conflict.resolve(refreshConflicts);
+    });
+  }
+
+  function refreshConflicts() {
+    $scope.localConflicts = [];
+    $scope.$apply();
+    sync();
+  }
 }

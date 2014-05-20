@@ -1,50 +1,62 @@
 <section id="local-conflicts" class="conflicts" ng-if="localConflicts.length">
   <h1>Local Conflicts</h1>
-  <table>
-    <tr>
-      <th>Local Data</th>
-      <th>Remote Data</th>
-    </tr>
-    <tr ng-repeat="conflict in localConflicts">
-      <td>
-        <div ng-if="conflict.sourceChange.type() === 'delete'">
-          <strong>Deleted</strong>
-        </div>
-        <table ng-if="conflict.sourceChange.type() === 'update'">
-          <tr>
-            <th>id</th>
-            <th>title</th>
-          </tr>
-          <tr>
-            <td>{{conflict.sourceChange.modelId}}</td>
-            <td>{{conflict.sourceChange.type()}}</td>
-            <td>
-              {{conflict.source.title}}
-            </td>
-          </tr>
-        </table>
-        <button ng-click="resolveUsingSource(conflict)">Use Local Version</button>
-      </td>
-      <td>
-        <div ng-if="conflict.targetChange.type() === 'delete'">
-          <strong>Deleted</strong>
-        </div>
-        <table ng-if="conflict.targetChange.type() === 'update'">
-          <tr>
-            <th>id</th>
-            <th>title</th>
-          </tr>
-          <tr>
-            <td>{{conflict.targetChange.modelId}}</td>
-            <td>{{conflict.targetChange.type()}}</td>
-            <td>
-              {{conflict.target.title}}
-            </td>
-          </tr>
-        </table>
-        <button ng-click="resolveUsingTarget(conflict)">Use Server Version</button>
-      </td>
-  </table>
+  <div ng-repeat="conflict in localConflicts">
+    <table>
+      <tr>
+        <th>Local Data</th>
+        <th>Remote Data</th>
+      </tr>
+      <tr>
+        <td>
+          {{conflict.modelId}}
+          {{conflict.sourceChange.type()}}
+          <div ng-if="conflict.sourceChange.type() === 'delete'">
+            <strong>Deleted</strong>
+          </div>
+          <table ng-if="conflict.sourceChange.type() === 'update'">
+            <tr>
+              <th>id</th>
+              <th>title</th>
+            </tr>
+            <tr>
+              <td>{{conflict.sourceChange.modelId}}</td>
+              <td>{{conflict.sourceChange.type()}}</td>
+              <td>
+                {{conflict.source.title}}
+              </td>
+            </tr>
+          </table>
+          <button ng-click="resolveUsingSource(conflict)">Use Local Version</button>
+        </td>
+        <td>
+          {{conflict.targetChange.type()}}
+          <div ng-if="conflict.targetChange.type() === 'delete'">
+            <strong>Deleted</strong>
+          </div>
+          <table ng-if="conflict.targetChange.type() === 'update'">
+            <tr>
+              <th>id</th>
+              <th>title</th>
+            </tr>
+            <tr>
+              <td>{{conflict.targetChange.modelId}}</td>
+              <td>{{conflict.targetChange.type()}}</td>
+              <td>
+                {{conflict.target.title}}
+              </td>
+            </tr>
+          </table>
+          <button ng-click="resolveUsingTarget(conflict)">Use Server Version</button>
+        </td>
+      </tr>
+    </table>
+    <div>
+      <strong>Merge Manually</strong>
+      <input class="toggle" type="checkbox" ng-model="conflict.manual.completed">
+      <input class="edit" ng-trim="false" ng-model="conflict.manual.title">
+      <button ng-click="resolveManually(conflict)">Use This Version</button>
+    </div>
+  </div>
 </section>
 
 <section id="todoapp">
@@ -92,7 +104,7 @@
   <p>Double-click to edit a todo</p>
 </footer>
 <footer class="debug">
-  <button ng-click="sync()">Sync</button>
+  <button ng-click="sync()" ng-class="{deltas: needSync}">Sync</button>
   <button ng-click="connect()">Connect</button>
   <button ng-click="disconnect()">Disconnect</button>
   <a href="/debug" target="_blank">Debug</a>
