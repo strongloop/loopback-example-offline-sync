@@ -8,8 +8,6 @@
       </tr>
       <tr>
         <td>
-          {{conflict.modelId}}
-          {{conflict.sourceChange.type()}}
           <div ng-if="conflict.sourceChange.type() === 'delete'">
             <strong>Deleted</strong>
           </div>
@@ -29,7 +27,6 @@
           <button ng-click="resolveUsingSource(conflict)">Use Local Version</button>
         </td>
         <td>
-          {{conflict.targetChange.type()}}
           <div ng-if="conflict.targetChange.type() === 'delete'">
             <strong>Deleted</strong>
           </div>
@@ -50,8 +47,8 @@
         </td>
       </tr>
     </table>
-    <div>
-      <strong>Merge Manually</strong>
+    <div class="manual-merge">
+      <h4>Merge Manually</h4>
       <input class="toggle" type="checkbox" ng-model="conflict.manual.completed">
       <input class="edit" ng-trim="false" ng-model="conflict.manual.title">
       <button ng-click="resolveManually(conflict)">Use This Version</button>
