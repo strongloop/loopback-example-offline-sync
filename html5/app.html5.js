@@ -2,21 +2,26 @@
 var LOCAL_CONFIG = require('local.config');
 var loopback = require('loopback');
 var client = exports.client = loopback();
+var async = require('async');
 
 // angular.js dependencies
 require('./bower_components/angular/angular.js');
 require('./bower_components/angular-route/angular-route.js');
 
-// data source
+// data sources
 var remote = loopback.createDataSource({
   connector: loopback.Remote,
   url: LOCAL_CONFIG.serverInfo.url
 });
+var memory = loopback.createDataSource({
+  connector: loopback.Memory,
+  localStorage: 'todo-db'
+});
 
 // models
 var User = require('models/user');
-var Todo = require('models/todo');
-var LocalTodo = Todo.extend('LocalTodo');
+var RemoteTodo = window.RemoteTodo = require('models/todo');
+var LocalTodo = window.LocalTodo = RemoteTodo.extend('LocalTodo');
 
 // routes
 var routes = LOCAL_CONFIG.routes;
@@ -27,6 +32,10 @@ var dependencies = ['ngRoute'];
 // angular app
 var app = module.exports = angular.module('app', dependencies);
 
+// providers
+app.value('Todo', LocalTodo);
+app.value('sync', sync);
+
 // setup controllers
 // must require controllers in order for browserify
 // to include them...
@@ -36,16 +45,33 @@ require('./controllers/todo.ctrl');
 require('./controllers/user.ctrl');
 require('./controllers/login.ctrl');
 require('./controllers/register.ctrl');
-
-// attach models to the loopback client
-client.model(Todo);
-client.model(User);
+require('./controllers/change.ctrl');
 
 // setup the model data sources
-User.attachTo(remote);
-Todo.attachTo(remote);
+RemoteTodo.attachTo(remote);
+LocalTodo.attachTo(memory);
+
+
+window.isConnected = true;
+
+window.connected = function connected() {
+  console.log('isConnected?', window.isConnected);
+  return window.isConnected;
+}
 
 // setup model replication
+function sync(cb) {
+  if(connected()) {
+    console.log('syncing...');
+    async.series([
+      RemoteTodo.replicate.bind(RemoteTodo, LocalTodo),
+      LocalTodo.replicate.bind(LocalTodo, RemoteTodo),
+    ], cb || noop);
+  }
+}
+
+// sync local changes if connected
+LocalTodo.getChangeModel().on('changed', sync);
 
 // setup routes
 Object.keys(routes)
@@ -71,3 +97,5 @@ app
     $routeProvider.otherwise({redirectTo: '/'});
     $locationProvider.html5Mode(true);
   }]);
+
+function noop(){};

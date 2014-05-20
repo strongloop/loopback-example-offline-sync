@@ -1,19 +1,21 @@
-loopback-example-full-stack
-===========================
+# Loopback Examples: Full Stack
 
-An example running LoopBack in the browser and server
+An example running LoopBack in the browser and server.
 
+## Install and Run
 
-## Structure
+0. You must have `node` and `git` installed.
 
-**API**
+1. Clone the repo.
 
-**html5**
+2. `cd loopback-example-full-stack`
 
-**models**
+3. `npm install` - install the root package dependencies
 
-**web**
+4. `npm install gulp -g` - skip if you have gulp installed
 
-## Build
+5. `gulp install` - install the sub package dependencies
 
-## Config
+6. `gulp` - build and run the entire project in development mode
+
+7. `open http://localhost:3000` - point a browser at the running app

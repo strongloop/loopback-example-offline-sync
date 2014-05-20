@@ -16,6 +16,10 @@ exports.global = function(env, global) {
       controller: 'UserCtrl',
       templateUrl: '/views/me.html',
     },
+    '/my/todos/:status': {
+      controller: 'TodoCtrl',
+      templateUrl: '/views/todos.html'
+    },
     '/my/todos': {
       controller: 'TodoCtrl',
       templateUrl: '/views/todos.html'
@@ -27,6 +31,10 @@ exports.global = function(env, global) {
     '/register': {
       controller: 'RegisterCtrl',
       templateUrl: '/views/register.html'
+    },
+    '/debug': {
+      controller: 'ChangeCtrl',
+      templateUrl: '/views/changes.html'
     }
   };
 

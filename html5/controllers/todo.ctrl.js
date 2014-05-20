@@ -1,25 +1,32 @@
 module.exports = TodoCtrl;
-var Todo = require('models/todo');
+var app = require('../app.html5');
 var async = require('async');
 
-function TodoCtrl($scope, $routeParams, $filter) {
+function TodoCtrl($scope, $routeParams, $filter, Todo, $location, sync) {
 	var todos = $scope.todos = [];
 
 	$scope.newTodo = '';
 	$scope.editedTodo = null;
+
+  // sync the initial data
+  sync(onChange);
+
+  // the location service
+  $scope.loc = $location;
 
 	function onChange() {
     Todo.stats(function(err, stats) {
       if(err) return error(err);
       $scope.stats = stats;
     });
-    Todo.find(function(err, todos) {
+    Todo.find({
+      where: $scope.statusFilter,
+      sort: 'order DESC'
+    }, function(err, todos) {
       $scope.todos = todos;
       $scope.$apply();
     });
   }
-
-  onChange();
 
   function error(err) {
     //TODO error handling
@@ -31,33 +38,29 @@ function TodoCtrl($scope, $routeParams, $filter) {
   }
 
   Todo.on('changed', onChange);
+  Todo.on('deleted', onChange);
 
 	// Monitor the current route for changes and adjust the filter accordingly.
 	$scope.$on('$routeChangeSuccess', function () {
 		var status = $scope.status = $routeParams.status || '';
-
 		$scope.statusFilter = (status === 'active') ?
 			{ completed: false } : (status === 'completed') ?
-			{ completed: true } : null;
+			{ completed: true } : {};
 	});
 
 	$scope.addTodo = function () {
 		var todo = new Todo({title: $scope.newTodo});
-    todo.save(onChange);
+    todo.save();
     $scope.newTodo = '';
 	};
 
 	$scope.editTodo = function (todo) {
 		$scope.editedTodo = todo;
-		// Clone the original todo to restore it on demand.
-		$scope.originalTodo = angular.extend({}, todo);
 	};
 
   $scope.todoCompleted = function(todo) {
     todo.completed = true;
-    Todo.upsert(todo, function() {
-      onChange();
-    });
+    todo.save();
   }
 
 	$scope.doneEditing = function (todo) {
@@ -66,21 +69,17 @@ function TodoCtrl($scope, $routeParams, $filter) {
 
 		if (!todo.title) {
 			$scope.removeTodo(todo);
-		}
-	};
-
-	$scope.revertEditing = function (todo) {
-		// todos[todos.indexOf(todo)] = $scope.originalTodo;
-		// $scope.doneEditing($scope.originalTodo);
+		} else {
+      todo.save();
+    }
 	};
 
 	$scope.removeTodo = function (todo) {
-    todo = new Todo(todo);
     todo.remove(errorCallback);
 	};
 
 	$scope.clearCompletedTodos = function () {
-    Todo.destroyAll({where: {completed: true}}, errorCallback);
+    Todo.destroyAll({completed: true}, onChange);
 	};
 
 	$scope.markAll = function (completed) {
@@ -92,4 +91,67 @@ function TodoCtrl($scope, $routeParams, $filter) {
       });
     });
 	};
+
+  $scope.sync = function() {
+    sync(diff);
+  };
+
+  $scope.connected = function() {
+    return window.connected();
+  };
+
+  $scope.connect = function() {
+    window.isConnected = true;
+    sync();
+  };
+
+  $scope.disconnect = function() {
+    window.isConnected = false;
+  };
+
+  Todo.on('conflicts', function(conflicts) {
+    $scope.localConflicts = conflicts;
+    conflicts.forEach(function(conflict) {
+      conflict.type(function(err, type) {
+        conflict.type = type;
+        conflict.models(function(err, source, target) {
+          conflict.source = source;
+          conflict.target = target;
+          conflict.manual = new conflict.SourceModel(source || target);
+          $scope.$apply();
+        });
+        conflict.changes(function(err, source, target) {
+          conflict.sourceChange = source;
+          conflict.targetChange = target;
+          $scope.$apply();
+        });
+      });
+    });
+  });
+
+  $scope.resolveUsingSource = function(conflict) {
+    conflict.resolve(refreshConflicts);
+  }
+
+  $scope.resolveUsingTarget = function(conflict) {
+    if(conflict.targetChange.type() === 'delete') {
+      conflict.SourceModel.deleteById(conflict.modelId, refreshConflicts);
+    } else {
+      var m = new conflict.SourceModel(conflict.target);
+      m.save(refreshConflicts);
+    }
+  }
+
+  $scope.resolveManually = function(conflict) {
+    conflict.manual.save(function(err) {
+      if(err) return errorCallback(err);
+      conflict.resolve(refreshConflicts);
+    });
+  }
+
+  function refreshConflicts() {
+    $scope.localConflicts = [];
+    $scope.$apply();
+    sync();
+  }
 }

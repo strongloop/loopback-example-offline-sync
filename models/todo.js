@@ -2,13 +2,24 @@ var loopback = require('loopback');
 var async = require('async');
 
 var Todo = module.exports = loopback.DataModel.extend('Todo', {
+  id: {id: true, type: String},
   title: String,
-  completed: {type: Boolean, default: false}
+  completed: {type: Boolean, default: false},
+  created: {type: Number, default: Date.now}
+}, {
+  trackChanges: true
 });
+
+Todo.beforeSave = function(next, model) {
+  if(!model.id) model.id = 't-' + Math.floor(Math.random() * 10000).toString();
+  next();
+}
 
 Todo.stats = function(filter, cb) {
   var stats = {};
-
+  cb = arguments[arguments.length - 1];
+  var Todo = this;
+  
   async.parallel([
     countComplete,
     count
@@ -19,7 +30,7 @@ Todo.stats = function(filter, cb) {
   });
 
   function countComplete(cb) {
-    Todo.count({where: {completed: true}}, function(err, count) {
+    Todo.count({completed: true}, function(err, count) {
       stats.completed = count;
       cb(err);
     });

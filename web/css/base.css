@@ -22,7 +22,7 @@ button {
 body {
 	font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	line-height: 1.4em;
-	background: #eaeaea url('bg.png');
+	background: #eaeaea;
 	color: #4d4d4d;
 	width: 550px;
 	margin: 0 auto;
@@ -554,3 +554,43 @@ hr {
 		margin: 130px auto 40px auto;
 	}
 }
+
+/* changes */
+
+table, table td, table th {
+	outline: solid 1px #ccc;
+	padding: 5px;
+	text-align: center;
+}
+
+/* debug footer */
+
+.debug button {
+	background: #6c615c;
+	padding: 5px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.debug button:active {
+	background: #000;
+}
+
+
+.debug {
+	border: dashed 2px #6c615c;
+	padding: 10px;
+}
+
+.conflicts button {
+	background: #6c615c;
+	padding: 5px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.conflicts button:active {
+	background: #000;
+}
+
+.deltas {background: red !important;}
