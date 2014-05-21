@@ -62,16 +62,15 @@ window.connected = function connected() {
 // setup model replication
 function sync(cb) {
   if(connected()) {
-    console.log('syncing...');
-    async.series([
-      RemoteTodo.replicate.bind(RemoteTodo, LocalTodo),
-      LocalTodo.replicate.bind(LocalTodo, RemoteTodo),
-    ], cb || noop);
+    RemoteTodo.replicate(LocalTodo, function() {
+      LocalTodo.replicate(RemoteTodo, cb);
+    });
   }
 }
 
 // sync local changes if connected
-LocalTodo.getChangeModel().on('changed', sync);
+LocalTodo.on('changed', sync);
+LocalTodo.on('deleted', sync);
 
 // setup routes
 Object.keys(routes)

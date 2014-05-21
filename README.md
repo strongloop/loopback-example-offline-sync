@@ -14,8 +14,6 @@ An example running LoopBack in the browser and server.
 
 4. `npm install gulp -g` - skip if you have gulp installed
 
-5. `gulp install` - install the sub package dependencies
-
 6. `gulp` - build and run the entire project in development mode
 
 7. `open http://localhost:3000` - point a browser at the running app

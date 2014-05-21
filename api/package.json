@@ -6,13 +6,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "loopback-datasource-juggler": "~1.3.10",
-    "loopback": "strongloop/loopback#1.9",
-    "loopback-explorer": "~1.1.0"
-  },
-  "devDependencies": {
-    "loopback-connector-mongodb": "^1.2.4"
-  }
+  "license": "ISC"
 }

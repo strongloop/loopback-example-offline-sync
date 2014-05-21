@@ -29,8 +29,16 @@
     "shelljs": "~0.2.6",
     "gulp": "~3.6.0",
     "async": "~0.7.0",
-    "gulp-nodemon": "~1.0.2"
+    "gulp-nodemon": "~1.0.2",
+    "uglifyify": "~2.1.1",
+    "browserify": "~4.1.2"
   },
   "dependencies": {
+    "async": "~0.7.0",
+    "loopback": "strongloop/loopback#1.9",
+    "loopback-explorer": "~1.1.0",
+    "loopback-connector-mongodb": "^1.2.4",
+    "loopback-datasource-juggler": "~1.6.0",
+    "ejs": "^1.0.0"
   }
 }

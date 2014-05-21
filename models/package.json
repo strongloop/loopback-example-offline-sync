@@ -7,8 +7,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "loopback": "strongloop/loopback#1.9"
-  }
+  "license": "ISC"
 }
