@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "loopback": "strongloop/loopback#1.9"
+    "loopback": "strongloop/loopback#1.9",
+    "loopback-datasource-juggler": "~1.6.0"
   }
 }

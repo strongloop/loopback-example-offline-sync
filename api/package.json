@@ -8,7 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "loopback-datasource-juggler": "~1.3.10",
+    "loopback-datasource-juggler": "~1.6.0",
     "loopback": "strongloop/loopback#1.9",
     "loopback-explorer": "~1.1.0"
   },

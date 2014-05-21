@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "loopback": "^1.8.0",
+    "loopback": "strongloop/loopback#1.9",
     "ejs": "^1.0.0"
   }
 }
