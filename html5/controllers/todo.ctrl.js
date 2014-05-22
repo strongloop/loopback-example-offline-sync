@@ -3,10 +3,10 @@ var app = require('../app.html5');
 var async = require('async');
 
 function TodoCtrl($scope, $routeParams, $filter, Todo, $location, sync) {
-	var todos = $scope.todos = [];
+  var todos = $scope.todos = [];
 
-	$scope.newTodo = '';
-	$scope.editedTodo = null;
+  $scope.newTodo = '';
+  $scope.editedTodo = null;
 
   // sync the initial data
   sync(onChange);
@@ -14,7 +14,7 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location, sync) {
   // the location service
   $scope.loc = $location;
 
-	function onChange() {
+  function onChange() {
     Todo.stats(function(err, stats) {
       if(err) return error(err);
       $scope.stats = stats;
@@ -42,47 +42,47 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location, sync) {
 
 	// Monitor the current route for changes and adjust the filter accordingly.
 	$scope.$on('$routeChangeSuccess', function () {
-		var status = $scope.status = $routeParams.status || '';
-		$scope.statusFilter = (status === 'active') ?
-			{ completed: false } : (status === 'completed') ?
-			{ completed: true } : {};
+	 var status = $scope.status = $routeParams.status || '';
+	 $scope.statusFilter = (status === 'active') ?
+	   { completed: false } : (status === 'completed') ?
+	   { completed: true } : {};
 	});
 
 	$scope.addTodo = function () {
-		var todo = new Todo({title: $scope.newTodo});
+    var todo = new Todo({title: $scope.newTodo});
     todo.save();
     $scope.newTodo = '';
-	};
+  };
 
-	$scope.editTodo = function (todo) {
-		$scope.editedTodo = todo;
-	};
+  $scope.editTodo = function (todo) {
+    $scope.editedTodo = todo;
+  };
 
   $scope.todoCompleted = function(todo) {
     todo.completed = true;
     todo.save();
   }
 
-	$scope.doneEditing = function (todo) {
-		$scope.editedTodo = null;
-		todo.title = todo.title.trim();
+  $scope.doneEditing = function (todo) {
+    $scope.editedTodo = null;
+    todo.title = todo.title.trim();
 
-		if (!todo.title) {
-			$scope.removeTodo(todo);
-		} else {
+    if (!todo.title) {
+      $scope.removeTodo(todo);
+    } else {
       todo.save();
     }
-	};
+  };
 
-	$scope.removeTodo = function (todo) {
+  $scope.removeTodo = function (todo) {
     todo.remove(errorCallback);
-	};
+  };
 
-	$scope.clearCompletedTodos = function () {
+  $scope.clearCompletedTodos = function () {
     Todo.destroyAll({completed: true}, onChange);
-	};
+  };
 
-	$scope.markAll = function (completed) {
+  $scope.markAll = function (completed) {
     Todo.find(function(err, todos) {
       if(err) return errorCallback(err);
       todos.forEach(function(todo) {
@@ -90,7 +90,7 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location, sync) {
         todo.save(errorCallback);
       });
     });
-	};
+  };
 
   $scope.sync = function() {
     sync();
