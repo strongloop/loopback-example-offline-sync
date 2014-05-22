@@ -4,7 +4,7 @@ An example running LoopBack in the browser and server.
 
 ## Install and Run
 
-0. You must have `node` and `git` installed.
+0. You must have `node`, `git`, and `mongod` installed.
 
 1. Clone the repo.
 
@@ -13,6 +13,8 @@ An example running LoopBack in the browser and server.
 3. `npm install` - install the root package dependencies
 
 4. `npm install gulp -g` - skip if you have gulp installed
+
+5. `mongod` - make sure mongodb is running
 
 6. `gulp` - build and run the entire project in development mode
 
