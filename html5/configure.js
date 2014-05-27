@@ -76,7 +76,11 @@ exports.build = function(env, global, local, cb) {
     }, 'uglifyify');
   }
 
-  b.bundle().pipe(out);
+  b.bundle({
+    // TODO(bajtos) debug should be always true, the sourcemaps should be
+    // saved to a standalone file when !isDev(env)
+    debug: isDev(env)
+  }).pipe(out);
 
   out.on('error', cb);
   out.on('close', cb);
