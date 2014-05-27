@@ -1,9 +1,11 @@
 var gulp = require('gulp');
+var async = require('async');
 var path = require('path');
 var pkg = require('./package.json');
 var fs = require('fs');
 var browserify = require('browserify');
 var sh = require('shelljs');
+var BootConfigLoader = require('loopback-boot').ConfigLoader;
 
 exports.global = function(env, global) {
   // routes
@@ -61,6 +63,46 @@ exports.local = function configure(env, global, local) {
 }
 
 exports.build = function(env, global, local, cb) {
+  async.waterfall([
+    function(next) {
+      buildDataSources(env, next);
+    },
+    function(next) {
+      createBundle(env, global, next);
+    }
+  ], cb);
+};
+
+function buildDataSources(env, cb) {
+  var dataSources = BootConfigLoader.loadDataSources(__dirname, env);
+  for (var name in dataSources) {
+    var cfg = dataSources[name];
+    var connector = cfg.connector.toLowerCase();
+    if (connector === 'memory' || connector === 'remote') {
+      cfg.connector = '::ref::' + connector;
+    } else {
+      return cb(new Error(
+          'Datasource ' + name + ' uses unknown connector ' + connector + '.'));
+    }
+  }
+
+  var dsconfig = 'var loopback = require(\'loopback\');' +
+    '\nmodule.exports = ' +
+    JSON.stringify(dataSources, null, 2) +
+    ';\n';
+
+  dsconfig = dsconfig
+    .replace(/"::ref::memory"/g, 'loopback.Memory')
+    .replace(/"::ref::remote"/g, 'loopback.Remote');
+
+  fs.writeFile(
+    path.resolve(__dirname, 'build', 'datasources.js'),
+    dsconfig,
+    'utf-8',
+    cb);
+}
+
+function createBundle(env, global, cb) {
   var b = browserify({basedir: __dirname});
   b.add('./' + pkg.main);
 

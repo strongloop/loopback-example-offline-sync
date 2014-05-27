@@ -2,21 +2,20 @@
 var LOCAL_CONFIG = require('local.config');
 var loopback = require('loopback');
 var client = exports.client = loopback();
-var async = require('async');
 
 // angular.js dependencies
 require('./bower_components/angular/angular.js');
 require('./bower_components/angular-route/angular-route.js');
 
-// data sources
-var remote = loopback.createDataSource({
-  connector: loopback.Remote,
-  url: LOCAL_CONFIG.serverInfo.url
+var lbapp = loopback();
+
+var dataSourceConfig = require('./build/datasources.js');
+Object.keys(dataSourceConfig).forEach(function(key) {
+  lbapp.dataSource(key, dataSourceConfig[key]);
 });
-var memory = loopback.createDataSource({
-  connector: loopback.Memory,
-  localStorage: 'todo-db'
-});
+
+var remote = lbapp.datasources.remote;
+var memory = lbapp.datasources.memory;
 
 // models
 var User = require('models/user');

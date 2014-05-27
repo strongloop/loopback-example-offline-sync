@@ -1,0 +1,9 @@
+{
+  "remote": {
+    "connector": "remote"
+  },
+  "memory": {
+    "connector": "memory",
+    "localStorage": "todo-db"
+  }
+}
