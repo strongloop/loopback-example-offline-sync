@@ -10,29 +10,15 @@ var server = module.exports = loopback();
 
 boot(server, {
   appRootDir: path.resolve(__dirname),
+  modelsRootDir: path.resolve(__dirname, '..'),
   appConfig: {
     // No app config to load, we are processing it manually now
     // TODO(bajtos) modify Gulp to create app.* config files
   },
-  models: {
-    // No models to load, we are building them manually now
-    // TODO(bajtos) Move model definitions to models.json
-  }
 });
 
-var db = server.datasources.db;
-
-// models
-var User = require('models/user');
-var Todo = require('models/todo');
-
-// setup the model data sources
-User.attachTo(db);
-Todo.attachTo(db);
-server.model(User);
-server.model(Todo);
-
 // TODO(ritch) this should be unecessary soon....
+var Todo = server.models.Todo;
 server.model(Todo.getChangeModel());
 
 // root api path

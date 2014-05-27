@@ -65,7 +65,14 @@ exports.local = function configure(env, global, local) {
 exports.build = function(env, global, local, cb) {
   async.waterfall([
     function(next) {
-      buildDataSources(env, next);
+      async.parallel([
+        function(next) {
+          buildDataSources(env, next);
+        },
+        function(next) {
+          buildModels(env, next);
+        }
+      ], function(err) { next(err); });
     },
     function(next) {
       createBundle(env, global, next);
@@ -100,6 +107,55 @@ function buildDataSources(env, cb) {
     dsconfig,
     'utf-8',
     cb);
+}
+
+function buildModels(env, cb) {
+  var models = BootConfigLoader.loadModels(path.resolve(__dirname, '..'), env);
+  var clientModels = require('./client.models.json');
+
+  var modelsFile = path.resolve(__dirname, 'build', 'models.js');
+  var modelsDir = path.resolve(__dirname, '..', 'models');
+
+  fs.readdir(modelsDir, function(err, files) {
+    if (err) return cb(err);
+
+    var code = 'var loopback = require(\'loopback\');\n' +
+      'var models, clientModels;\n\n' +
+      'module.exports = function(app) {\n' +
+      '  for (var name in models) {\n' +
+      '    app.model(name, models[name]);\n' +
+      '  }\n\n';
+
+    files.forEach(function(f) {
+      f = path.resolve(modelsDir, f);
+      if (path.extname(f) !== '.js' || !fs.statSync(f).isFile()) return;
+      var relative = path.relative(path.dirname(modelsFile), f);
+      code += '  runExportedFn(app, require(' +
+        JSON.stringify(relative) + '));\n';
+    });
+
+    // It is important to create client models only after the shared models
+    // were fully initialized. Otherwise client models extending server models
+    // won't get static methods defined in models/*.js scripts.
+    code += '\n' +
+    '  for (name in clientModels) {\n' +
+    '    app.model(name, clientModels[name]);\n' +
+    '  }\n';
+
+    // end of the exported fn
+    code += '};\n';
+
+    code += '\nmodels = ' + JSON.stringify(models, null, 2) + ';\n';
+    code += '\nclientModels = ' + JSON.stringify(clientModels, null, 2) + ';\n';
+    code += '\nfunction runExportedFn(app, fn) {\n' +
+      '  var executable = typeof fn === \'function\' &&\n' +
+      '    !(fn.prototype instanceof loopback.Model);\n' +
+      '  if (!executable) return;\n' +
+      '  fn(app);\n' +
+      '}';
+
+    fs.writeFile(modelsFile, code, 'utf-8', cb);
+  });
 }
 
 function createBundle(env, global, cb) {
