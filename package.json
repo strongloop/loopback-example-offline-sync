@@ -35,10 +35,10 @@
   },
   "dependencies": {
     "async": "~0.7.0",
-    "loopback": "strongloop/loopback#1.9",
+    "loopback": "2.0.0-beta2",
     "loopback-explorer": "~1.1.0",
     "loopback-connector-mongodb": "^1.2.4",
-    "loopback-datasource-juggler": "strongloop/loopback-datasource-juggler",
+    "loopback-datasource-juggler": "2.0.0-beta1",
     "ejs": "^1.0.0"
   }
 }

@@ -1,5 +1,7 @@
 # Loopback Examples: Full Stack
 
+**Note: this example uses `loopback@2.0.0-beta`!**
+
 An example running LoopBack in the browser and server.
 
 ## Install and Run
