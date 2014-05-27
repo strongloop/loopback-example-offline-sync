@@ -39,6 +39,7 @@
     "loopback-explorer": "~1.1.0",
     "loopback-connector-mongodb": "^1.2.4",
     "loopback-datasource-juggler": "2.0.0-beta1",
+    "loopback-boot": "strongloop/loopback-boot",
     "ejs": "^1.0.0"
   }
 }

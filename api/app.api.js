@@ -3,17 +3,24 @@ var path = require('path');
 var loopback = require('loopback');
 var explorer = require('loopback-explorer');
 var CONFIG = require('global.config');
-var LOCAL_CONFIG = require('local.config');
+var boot = require('loopback-boot');
 
 // server
 var server = module.exports = loopback();
 
-// data source
-// var db = loopback.createDataSource(LOCAL_CONFIG.db);
-var db = loopback.createDataSource({
-  connector: require('loopback-connector-mongodb'),
-  database: 'todo-example'
+boot(server, {
+  appRootDir: path.resolve(__dirname),
+  appConfig: {
+    // No app config to load, we are processing it manually now
+    // TODO(bajtos) modify Gulp to create app.* config files
+  },
+  models: {
+    // No models to load, we are building them manually now
+    // TODO(bajtos) Move model definitions to models.json
+  }
 });
+
+var db = server.datasources.db;
 
 // models
 var User = require('models/user');
