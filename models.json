@@ -1,0 +1,37 @@
+{
+  "Todo": {
+    "options": {
+      "trackChanges": true,
+      "base": "DataModel"
+    },
+    "properties": {
+      "id": {
+        "id": true,
+        "type": "string"
+      },
+      "title": "string",
+      "completed": {
+        "type": "boolean",
+        "default": false
+      },
+      "created": {
+        "type": "number",
+        "//default": "//TODO: Date.now"
+      }
+    },
+    "dataSource": "db"
+  },
+  "user": {
+    "options": {
+      "base": "User"
+    },
+    "properties": {
+      "title": "string",
+      "done": {
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "dataSource": "db"
+  }
+}

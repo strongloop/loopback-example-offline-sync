@@ -2,26 +2,41 @@
 var LOCAL_CONFIG = require('local.config');
 var loopback = require('loopback');
 var client = exports.client = loopback();
-var async = require('async');
 
 // angular.js dependencies
 require('./bower_components/angular/angular.js');
 require('./bower_components/angular-route/angular-route.js');
 
-// data sources
-var remote = loopback.createDataSource({
-  connector: loopback.Remote,
-  url: LOCAL_CONFIG.serverInfo.url
-});
-var memory = loopback.createDataSource({
-  connector: loopback.Memory,
-  localStorage: 'todo-db'
-});
+var lbapp = loopback();
 
-// models
-var User = require('models/user');
-var RemoteTodo = window.RemoteTodo = require('models/todo');
-var LocalTodo = window.LocalTodo = RemoteTodo.extend('LocalTodo');
+require('./build/datasources.js')(lbapp);
+require('./build/models.js')(lbapp);
+
+// TODO(bajtos) Move the bi-di replication to loopback core,
+// add model settings to enable the replication.
+// Example:
+//  LocalTodo: { options: {
+//    base: 'Todo',
+//    replicate: {
+//      target: 'Todo',
+//      mode: 'push' | 'pull' | 'bidi'
+//    }}}
+
+var LocalTodo = lbapp.models.LocalTodo;
+var RemoteTodo = lbapp.models.Todo;
+
+// setup model replication
+function sync(cb) {
+  if(window.connected()) {
+    RemoteTodo.replicate(LocalTodo, function() {
+      LocalTodo.replicate(RemoteTodo, cb);
+    });
+  }
+}
+
+// sync local changes if connected
+LocalTodo.on('changed', sync);
+LocalTodo.on('deleted', sync);
 
 // routes
 var routes = LOCAL_CONFIG.routes;
@@ -47,30 +62,12 @@ require('./controllers/login.ctrl');
 require('./controllers/register.ctrl');
 require('./controllers/change.ctrl');
 
-// setup the model data sources
-RemoteTodo.attachTo(remote);
-LocalTodo.attachTo(memory);
-
-
 window.isConnected = true;
 
 window.connected = function connected() {
   console.log('isConnected?', window.isConnected);
   return window.isConnected;
 }
-
-// setup model replication
-function sync(cb) {
-  if(connected()) {
-    RemoteTodo.replicate(LocalTodo, function() {
-      LocalTodo.replicate(RemoteTodo, cb);
-    });
-  }
-}
-
-// sync local changes if connected
-LocalTodo.on('changed', sync);
-LocalTodo.on('deleted', sync);
 
 // setup routes
 Object.keys(routes)

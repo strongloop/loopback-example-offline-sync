@@ -67,8 +67,10 @@ function findAndBuild(packageName, cb) {
 function findSrc(package) {
   var paths = [];
   findPackages(package).forEach(function(pkg) {
-    paths.push(path.join(__dirname, pkg, '*', '*') + '.js');
+    paths.push(path.join(__dirname, pkg, '*', '*.js'));
+    paths.push(path.join(__dirname, pkg, '*', '*.json'));
     paths.push(path.join(__dirname, pkg, '*.js'));
+    paths.push(path.join(__dirname, pkg, '*.json'));
   });
   return paths;
 }

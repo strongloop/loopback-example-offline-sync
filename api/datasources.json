@@ -1,0 +1,6 @@
+{
+  "db": {
+    "connector": "memory",
+    "defaultForType": "db"
+  }
+}

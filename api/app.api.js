@@ -3,29 +3,22 @@ var path = require('path');
 var loopback = require('loopback');
 var explorer = require('loopback-explorer');
 var CONFIG = require('global.config');
-var LOCAL_CONFIG = require('local.config');
+var boot = require('loopback-boot');
 
 // server
 var server = module.exports = loopback();
 
-// data source
-// var db = loopback.createDataSource(LOCAL_CONFIG.db);
-var db = loopback.createDataSource({
-  connector: require('loopback-connector-mongodb'),
-  database: 'todo-example'
+boot(server, {
+  appRootDir: path.resolve(__dirname),
+  modelsRootDir: path.resolve(__dirname, '..'),
+  appConfig: {
+    // No app config to load, we are processing it manually now
+    // TODO(bajtos) modify Gulp to create app.* config files
+  },
 });
 
-// models
-var User = require('models/user');
-var Todo = require('models/todo');
-
-// setup the model data sources
-User.attachTo(db);
-Todo.attachTo(db);
-server.model(User);
-server.model(Todo);
-
 // TODO(ritch) this should be unecessary soon....
+var Todo = server.models.Todo;
 server.model(Todo.getChangeModel());
 
 // root api path

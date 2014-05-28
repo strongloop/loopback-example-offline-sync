@@ -1,0 +1,8 @@
+{
+  "LocalTodo": {
+    "dataSource": "local",
+    "options": {
+      "base": "Todo"
+    }
+  }
+}
