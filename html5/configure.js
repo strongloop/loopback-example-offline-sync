@@ -81,6 +81,7 @@ exports.build = function(env, global, local, cb) {
 };
 
 function buildDataSources(env, cb) {
+  // TODO(bajtos) Get rid of '::ref::' code, use loopback#287 instead
   var dataSources = BootConfigLoader.loadDataSources(__dirname, env);
   for (var name in dataSources) {
     var cfg = dataSources[name];
@@ -141,6 +142,8 @@ function buildModels(env, cb) {
     '  for (name in clientModels) {\n' +
     '    app.model(name, clientModels[name]);\n' +
     '  }\n';
+
+    //TODO(bajtos) Require and run all files in `client.models/*`
 
     // end of the exported fn
     code += '};\n';
