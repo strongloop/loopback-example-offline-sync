@@ -8,6 +8,7 @@
 .DS_Store
 build
 global.config.js
+html5/bower_components/
 html5/build
 lib-cov
 local.config.js
