@@ -2,7 +2,7 @@
   "name": "loopback-example-full-stack",
   "version": "0.0.1",
   "description": "LoopBack browser and server example",
-  "main": "index.js",
+  "main": "web/app.js",
   "directories": {
     "test": "test"
   },
