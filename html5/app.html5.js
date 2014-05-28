@@ -9,11 +9,7 @@ require('./bower_components/angular-route/angular-route.js');
 
 var lbapp = loopback();
 
-var dataSourceConfig = require('./build/datasources.js');
-Object.keys(dataSourceConfig).forEach(function(key) {
-  lbapp.dataSource(key, dataSourceConfig[key]);
-});
-
+require('./build/datasources.js')(lbapp);
 require('./build/models.js')(lbapp);
 
 // TODO(bajtos) Move the bi-di replication to loopback core,

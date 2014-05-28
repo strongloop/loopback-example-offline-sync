@@ -95,7 +95,14 @@ function buildDataSources(env, cb) {
   }
 
   var dsconfig = 'var loopback = require(\'loopback\');' +
-    '\nmodule.exports = ' +
+    '\nvar config;' +
+    '\nmodule.exports = function(app) {\n' +
+    '  for (var name in config) {\n' +
+    '    app.dataSource(name, config[name]);\n' +
+    '  }\n'+
+    '};\n' +
+    '\n' +
+    'config = ' +
     JSON.stringify(dataSources, null, 2) +
     ';\n';
 
