@@ -81,14 +81,11 @@ exports.build = function(env, global, local, cb) {
 };
 
 function buildDataSources(env, cb) {
-  // TODO(bajtos) Get rid of '::ref::' code, use loopback#287 instead
   var dataSources = BootConfigLoader.loadDataSources(__dirname, env);
   for (var name in dataSources) {
     var cfg = dataSources[name];
-    var connector = cfg.connector.toLowerCase();
-    if (connector === 'memory' || connector === 'remote') {
-      cfg.connector = '::ref::' + connector;
-    } else {
+    var connector = cfg.connector;
+    if (connector !== 'memory' && connector !== 'remote') {
       return cb(new Error(
           'Datasource ' + name + ' uses unknown connector ' + connector + '.'));
     }
@@ -105,10 +102,6 @@ function buildDataSources(env, cb) {
     'config = ' +
     JSON.stringify(dataSources, null, 2) +
     ';\n';
-
-  dsconfig = dsconfig
-    .replace(/"::ref::memory"/g, 'loopback.Memory')
-    .replace(/"::ref::remote"/g, 'loopback.Remote');
 
   fs.writeFile(
     path.resolve(__dirname, 'build', 'datasources.js'),
