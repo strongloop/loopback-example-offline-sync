@@ -1,0 +1,21 @@
+{
+  "name": "loopback-example-full-stack",
+  "version": "0.0.0",
+  "homepage": "https://github.com/strongloop/loopback-example-full-stack",
+  "authors": [
+    "Sam Roberts <sam@strongloop.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "html5/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-route": "~1.2.16"
+  }
+}
