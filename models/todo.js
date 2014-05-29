@@ -4,6 +4,8 @@ var async = require('async');
 module.exports = function(app) {
   var Todo = app.models.Todo;
 
+  Todo.definition.properties.created.default = Date.now;
+
   Todo.beforeSave = function(next, model) {
     if (!model.id) model.id = 't-' + Math.floor(Math.random() * 10000).toString();
     next();
