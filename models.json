@@ -15,8 +15,7 @@
         "default": false
       },
       "created": {
-        "type": "number",
-        "//default": "//TODO: Date.now"
+        "type": "number"
       }
     },
     "dataSource": "db"
