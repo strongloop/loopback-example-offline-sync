@@ -17,19 +17,11 @@ boot(server, {
   },
 });
 
-// TODO(ritch) this should be unecessary soon....
-var Todo = server.models.Todo;
-server.model(Todo.getChangeModel());
-
 // root api path
 var apiPath = CONFIG.api.root;
 
-// enable authentication
-// server.enableAuth();
-
 // middleware
 server.use(loopback.logger('dev'));
-server.use(loopback.token());
 server.use(apiPath, loopback.rest());
 server.use('/explorer', explorer(server, {basePath: apiPath}));
 
