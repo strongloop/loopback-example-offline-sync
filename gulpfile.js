@@ -33,7 +33,9 @@ gulp.task('run', function(cb) {
     })
     .on('change', function() {
       // TODO(ritch) only build the package that changed
-      findAndBuild('*');
+      findAndBuild('*', function(err) {
+        cb(err);
+      });
     })
     .on('restart', function () {
       console.log('restarted!');
