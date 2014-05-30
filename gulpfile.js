@@ -18,11 +18,16 @@ process.env.NODE_PATH = __dirname + ':' + process.env.NODE_PATH;
 // run the entire project
 gulp.task('run', function(cb) {
   nodemon({
-      script: 'app.js',
-      ext: 'html js ejs',
-      ignore: ['node_modules/**', 'node_modules/**/node_modules', 'build/**'],
-      watch: findSrc(),
-      cwd: path.join(__dirname, 'web'),
+      script: 'web/app.js',
+      ext: 'html js ejs json',
+      ignore: [
+        '**/node_modules/**',
+        'html5/build/**',
+        '**/test/**',
+        '.*' // .git, .idea, etc.
+      ],
+      watch: __dirname,
+      cwd: __dirname,
       env: {NODE_PATH: process.env.NODE_PATH},
       nodeArgs: ['--debug']
     })
@@ -62,17 +67,6 @@ function findAndBuild(packageName, cb) {
 
   // build each
   async.each(packages, build, cb);
-}
-
-function findSrc(package) {
-  var paths = [];
-  findPackages(package).forEach(function(pkg) {
-    paths.push(path.join(__dirname, pkg, '*', '*.js'));
-    paths.push(path.join(__dirname, pkg, '*', '*.json'));
-    paths.push(path.join(__dirname, pkg, '*.js'));
-    paths.push(path.join(__dirname, pkg, '*.json'));
-  });
-  return paths;
 }
 
 var packageCache;
