@@ -22,7 +22,7 @@ gulp.task('run', function(cb) {
       ext: 'html js ejs json',
       ignore: [
         '**/node_modules/**',
-        'html5/build/**',
+        '*/build/**',
         '**/test/**',
         '.*' // .git, .idea, etc.
       ],
