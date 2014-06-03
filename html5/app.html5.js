@@ -1,6 +1,7 @@
 // dependencies
 var LOCAL_CONFIG = require('local.config');
 var loopback = require('loopback');
+var boot = require('loopback-boot');
 var client = exports.client = loopback();
 
 // angular.js dependencies
@@ -8,9 +9,7 @@ require('./bower_components/angular/angular.js');
 require('./bower_components/angular-route/angular-route.js');
 
 var lbapp = loopback();
-
-require('./build/datasources.js')(lbapp);
-require('./build/models.js')(lbapp);
+boot(lbapp);
 
 // TODO(bajtos) Move the bi-di replication to loopback core,
 // add model settings to enable the replication.

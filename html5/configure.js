@@ -5,7 +5,7 @@ var pkg = require('./package.json');
 var fs = require('fs');
 var browserify = require('browserify');
 var sh = require('shelljs');
-var BootConfigLoader = require('loopback-boot').ConfigLoader;
+var boot = require('loopback-boot');
 
 var buildDir = path.resolve(__dirname, 'build');
 
@@ -75,105 +75,24 @@ exports.build = function(env, global, local, cb) {
       });
     },
     function(next) {
-      async.parallel([
-        function(next) {
-          buildDataSources(env, next);
-        },
-        function(next) {
-          buildModels(env, next);
-        }
-      ], function(err) { next(err); });
-    },
-    function(next) {
       createBundle(env, global, next);
     }
   ], cb);
 };
 
-function buildDataSources(env, cb) {
-  var dataSources = BootConfigLoader.loadDataSources(__dirname, env);
-  for (var name in dataSources) {
-    var cfg = dataSources[name];
-    var connector = cfg.connector;
-    if (connector !== 'memory' && connector !== 'remote') {
-      return cb(new Error(
-          'Datasource ' + name + ' uses unknown connector ' + connector + '.'));
-    }
-  }
-
-  var dsconfig = 'var loopback = require(\'loopback\');' +
-    '\nvar config;' +
-    '\nmodule.exports = function(app) {\n' +
-    '  for (var name in config) {\n' +
-    '    app.dataSource(name, config[name]);\n' +
-    '  }\n'+
-    '};\n' +
-    '\n' +
-    'config = ' +
-    JSON.stringify(dataSources, null, 2) +
-    ';\n';
-
-  fs.writeFile(
-    path.resolve(__dirname, 'build', 'datasources.js'),
-    dsconfig,
-    'utf-8',
-    cb);
-}
-
-function buildModels(env, cb) {
-  var models = BootConfigLoader.loadModels(path.resolve(__dirname, '..'), env);
-  var clientModels = require('./client.models.json');
-
-  var modelsFile = path.resolve(__dirname, 'build', 'models.js');
-  var modelsDir = path.resolve(__dirname, '..', 'models');
-
-  fs.readdir(modelsDir, function(err, files) {
-    if (err) return cb(err);
-
-    var code = 'var loopback = require(\'loopback\');\n' +
-      'var models, clientModels;\n\n' +
-      'module.exports = function(app) {\n' +
-      '  for (var name in models) {\n' +
-      '    app.model(name, models[name]);\n' +
-      '  }\n\n';
-
-    files.forEach(function(f) {
-      f = path.resolve(modelsDir, f);
-      if (path.extname(f) !== '.js' || !fs.statSync(f).isFile()) return;
-      var relative = path.relative(path.dirname(modelsFile), f);
-      code += '  runExportedFn(app, require(' +
-        JSON.stringify(relative) + '));\n';
-    });
-
-    // It is important to create client models only after the shared models
-    // were fully initialized. Otherwise client models extending server models
-    // won't get static methods defined in models/*.js scripts.
-    code += '\n' +
-    '  for (name in clientModels) {\n' +
-    '    app.model(name, clientModels[name]);\n' +
-    '  }\n';
-
-    //TODO(bajtos) Require and run all files in `client.models/*`
-
-    // end of the exported fn
-    code += '};\n';
-
-    code += '\nmodels = ' + JSON.stringify(models, null, 2) + ';\n';
-    code += '\nclientModels = ' + JSON.stringify(clientModels, null, 2) + ';\n';
-    code += '\nfunction runExportedFn(app, fn) {\n' +
-      '  var executable = typeof fn === \'function\' &&\n' +
-      '    !(fn.prototype instanceof loopback.Model);\n' +
-      '  if (!executable) return;\n' +
-      '  fn(app);\n' +
-      '}';
-
-    fs.writeFile(modelsFile, code, 'utf-8', cb);
-  });
-}
-
 function createBundle(env, global, cb) {
   var b = browserify({basedir: __dirname});
   b.add('./' + pkg.main);
+
+  try {
+    boot.compileToBrowserify({
+      appRootDir: __dirname,
+      modelsRootDir: path.resolve(__dirname, '..'),
+      env: env
+    }, b);
+  } catch(err) {
+    return cb(err);
+  }
 
   var bundleDir = path.dirname(global.html5Bundle);
   if (!fs.existsSync(bundleDir))
