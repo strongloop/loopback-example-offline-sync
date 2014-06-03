@@ -1,11 +1,7 @@
 // dependencies
 var LOCAL_CONFIG = require('local.config');
-var loopback = require('loopback');
-var boot = require('loopback-boot');
 
-// loopback client
-var client = exports.client = loopback();
-boot(client);
+var client = exports.client = require('client');
 
 // angular.js dependencies
 require('./bower_components/angular/angular.js');

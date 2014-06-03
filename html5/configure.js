@@ -1,11 +1,7 @@
-var gulp = require('gulp');
-var async = require('async');
 var path = require('path');
 var pkg = require('./package.json');
 var fs = require('fs');
 var browserify = require('browserify');
-var sh = require('shelljs');
-var boot = require('loopback-boot');
 
 var buildDir = path.resolve(__dirname, 'build');
 
@@ -65,34 +61,8 @@ exports.local = function configure(env, global, local) {
 }
 
 exports.build = function(env, global, local, cb) {
-  async.waterfall([
-    function createBuildDir(next) {
-      fs.exists(buildDir, function(yes) {
-        if (yes)
-          next();
-        else
-          fs.mkdir(buildDir, next);
-      });
-    },
-    function(next) {
-      createBundle(env, global, next);
-    }
-  ], cb);
-};
-
-function createBundle(env, global, cb) {
   var b = browserify({basedir: __dirname});
   b.add('./' + pkg.main);
-
-  try {
-    boot.compileToBrowserify({
-      appRootDir: __dirname,
-      modelsRootDir: path.resolve(__dirname, '..'),
-      env: env
-    }, b);
-  } catch(err) {
-    return cb(err);
-  }
 
   var bundleDir = path.dirname(global.html5Bundle);
   if (!fs.existsSync(bundleDir))
