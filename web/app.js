@@ -11,10 +11,8 @@ var api = require('api');
 app.use(loopback.compress());
 
 // template data
-app.locals({
-  title: LOCAL_CONFIG.title,
-  CONFIG: CONFIG
-});
+app.locals.title = LOCAL_CONFIG.title;
+app.locals.CONFIG = CONFIG;
 
 // view engine
 app.engine('html', require('ejs').renderFile);
