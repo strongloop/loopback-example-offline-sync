@@ -19,6 +19,9 @@ app.locals({
 // view engine
 app.engine('html', require('ejs').renderFile);
 
+// fix the path to page templates - it is $pwd/views by default
+app.set('views', path.join(__dirname, 'views'));
+
 // html5 routes
 var routes = CONFIG.routes;
 Object
