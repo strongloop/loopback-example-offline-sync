@@ -7,6 +7,8 @@ var browserify = require('browserify');
 var sh = require('shelljs');
 var BootConfigLoader = require('loopback-boot').ConfigLoader;
 
+var buildDir = path.resolve(__dirname, 'build');
+
 exports.global = function(env, global) {
   // routes
   global.routes = {
@@ -44,7 +46,7 @@ exports.global = function(env, global) {
   if(!isDev(env)) global.bundle += '.min';
   global.bundle += '.js';
   global.html5Views = path.join(__dirname, 'views');
-  global.html5Bundle = path.join(__dirname, 'build', global.bundle);
+  global.html5Bundle = path.join(buildDir, global.bundle);
   global.bundleURL = '/' + global.bundle;
 }
 
@@ -64,6 +66,14 @@ exports.local = function configure(env, global, local) {
 
 exports.build = function(env, global, local, cb) {
   async.waterfall([
+    function createBuildDir(next) {
+      fs.exists(buildDir, function(yes) {
+        if (yes)
+          next();
+        else
+          fs.mkdir(buildDir, next);
+      });
+    },
     function(next) {
       async.parallel([
         function(next) {
