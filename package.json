@@ -2,12 +2,13 @@
   "name": "loopback-example-full-stack",
   "version": "0.0.1",
   "description": "LoopBack browser and server example",
-  "main": "index.js",
+  "main": "web/app.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",

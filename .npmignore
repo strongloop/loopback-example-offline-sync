@@ -6,14 +6,8 @@
 *.pid
 *.seed
 .DS_Store
-build
-global.config.js
-html5/build
 lib-cov
-local.config.js
 logs
-node_modules
 npm-debug.log
 pids
-public/bundle.js
 results
