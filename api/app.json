@@ -1,2 +1,4 @@
 {
+  "restApiRoot": "/api",
+  "explorerRoot": "/explorer"
 }

@@ -4,15 +4,15 @@ var loopback = require('loopback');
 var explorer = require('loopback-explorer');
 var boot = require('loopback-boot');
 
-// server
-var server = module.exports = loopback();
+// the loopback api server
+var api = module.exports = loopback();
 
-boot(server, {
+boot(api, {
   appRootDir: __dirname,
   modelsRootDir: path.resolve(__dirname, '..'),
 });
 
 // middleware
-server.use(loopback.logger('dev'));
-server.use(server.get('restApiRoot'), loopback.rest());
-server.use('/explorer', explorer(server));
+api.use(loopback.logger('dev'));
+api.use(api.get('restApiRoot'), loopback.rest());
+api.use(api.get('explorerRoot'), explorer(server));
