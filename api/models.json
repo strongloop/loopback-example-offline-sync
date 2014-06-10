@@ -1,0 +1,8 @@
+{
+  "Todo": {
+    "dataSource": "db"
+  },
+  "user": {
+    "dataSource": "db"
+  }
+}

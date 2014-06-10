@@ -3,6 +3,10 @@ var LOCAL_CONFIG = require('local.config');
 var loopback = require('loopback');
 var boot = require('loopback-boot');
 
+// model definitions
+require('../models');
+require('./models/index');
+
 // loopback client
 var client = exports.client = loopback();
 boot(client);

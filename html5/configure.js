@@ -87,7 +87,6 @@ function createBundle(env, global, cb) {
   try {
     boot.compileToBrowserify({
       appRootDir: __dirname,
-      modelsRootDir: path.resolve(__dirname, '..'),
       env: env
     }, b);
   } catch(err) {
