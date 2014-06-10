@@ -16,7 +16,10 @@ An example running LoopBack in the browser and server.
 
 4. `npm install gulp -g` - skip if you have gulp installed
 
-5. `mongod` - make sure mongodb is running
+4. `bower install` - install front-end scripts
+
+5. `mongod` - make sure mongodb is running if you want to run with
+`NODE_ENV=production`
 
 6. `gulp` - build and run the entire project in development mode
 
