@@ -2,7 +2,7 @@ module.exports = TodoCtrl;
 var app = require('../app.html5');
 var async = require('async');
 
-function TodoCtrl($scope, $routeParams, $filter, Todo, $location, sync) {
+function TodoCtrl($scope, $routeParams, $filter, Todo, $location, sync, network) {
   var todos = $scope.todos = [];
 
   $scope.newTodo = '';
@@ -97,16 +97,16 @@ function TodoCtrl($scope, $routeParams, $filter, Todo, $location, sync) {
   };
 
   $scope.connected = function() {
-    return window.connected();
+    return network.isConnected;
   };
 
   $scope.connect = function() {
-    window.isConnected = true;
+    network.isConnected = true;
     sync();
   };
 
   $scope.disconnect = function() {
-    window.isConnected = false;
+    network.isConnected = false;
   };
 
   Todo.on('conflicts', function(conflicts) {

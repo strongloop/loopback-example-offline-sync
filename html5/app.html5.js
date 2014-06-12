@@ -20,6 +20,7 @@ var app = module.exports = angular.module('app', dependencies);
 // providers
 app.value('Todo', client.models.LocalTodo);
 app.value('sync', client.sync);
+app.value('network', client.network);
 
 // setup controllers
 // must require controllers in order for browserify

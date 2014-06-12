@@ -11,9 +11,20 @@ module.exports = function(client) {
   var LocalTodo = client.models.LocalTodo;
   var RemoteTodo = client.models.Todo;
 
+  client.network = {
+    _isConnected: true,
+    get isConnected() {
+      console.log('isConnected?', this._isConnected);
+      return this._isConnected;
+    },
+    set isConnected(value) {
+      this._isConnected = value;
+    }
+  };
+
   // setup model replication
   function sync(cb) {
-    if (window.connected()) {
+    if (client.network.isConnected) {
       RemoteTodo.replicate(LocalTodo, function() {
         LocalTodo.replicate(RemoteTodo, cb);
       });
@@ -25,11 +36,4 @@ module.exports = function(client) {
   LocalTodo.on('deleted', sync);
 
   client.sync = sync;
-
-  window.isConnected = true;
-
-  window.connected = function connected() {
-    console.log('isConnected?', window.isConnected);
-    return window.isConnected;
-  };
 };
