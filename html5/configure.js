@@ -1,11 +1,8 @@
-var gulp = require('gulp');
 var async = require('async');
 var path = require('path');
 var pkg = require('./package.json');
 var fs = require('fs');
 var browserify = require('browserify');
-var sh = require('shelljs');
-var boot = require('loopback-boot');
 
 var buildDir = path.resolve(__dirname, 'build');
 
@@ -47,7 +44,9 @@ exports.global = function(env, global) {
   global.bundle += '.js';
   global.html5Views = path.join(__dirname, 'views');
   global.html5Bundle = path.join(buildDir, global.bundle);
+  global.clientBundle = path.join(buildDir, 'client.' + global.bundle);
   global.bundleURL = '/' + global.bundle;
+  global.clientURL = '/client.' + global.bundle;
 }
 
 exports.local = function configure(env, global, local) {
@@ -65,17 +64,12 @@ exports.local = function configure(env, global, local) {
 }
 
 exports.build = function(env, global, local, cb) {
-  async.waterfall([
-    function createBuildDir(next) {
-      fs.exists(buildDir, function(yes) {
-        if (yes)
-          next();
-        else
-          fs.mkdir(buildDir, next);
-      });
-    },
+  async.parallel([
     function(next) {
       createBundle(env, global, next);
+    },
+    function(next) {
+      copyClientBundle(global, next);
     }
   ], cb);
 };
@@ -83,15 +77,7 @@ exports.build = function(env, global, local, cb) {
 function createBundle(env, global, cb) {
   var b = browserify({basedir: __dirname});
   b.add('./' + pkg.main);
-
-  try {
-    boot.compileToBrowserify({
-      appRootDir: __dirname,
-      env: env
-    }, b);
-  } catch(err) {
-    return cb(err);
-  }
+  b.exclude('lbclient');
 
   var bundleDir = path.dirname(global.html5Bundle);
   if (!fs.existsSync(bundleDir))
@@ -99,7 +85,7 @@ function createBundle(env, global, cb) {
 
   var out = fs.createWriteStream(global.html5Bundle);
 
-  if(!isDev(env)) {
+  if (!isDev(env)) {
     b.transform({
       global: true
     }, 'uglifyify');
@@ -109,10 +95,25 @@ function createBundle(env, global, cb) {
     // TODO(bajtos) debug should be always true, the sourcemaps should be
     // saved to a standalone file when !isDev(env)
     debug: isDev(env)
-  }).pipe(out);
+  })
+    .on('error', cb)
+    .pipe(out);
 
   out.on('error', cb);
   out.on('close', cb);
+}
+
+function copyClientBundle(global, cb) {
+  var clientBundle = require.resolve('../lbclient/browser.bundle.js');
+  var client = fs.createReadStream(clientBundle);
+
+  var out = fs.createWriteStream(global.clientBundle);
+
+  client
+    .on('error', cb)
+    .pipe(out)
+    .on('error', cb)
+    .on('close', cb);
 }
 
 function isDev(env) {
