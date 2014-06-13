@@ -24,6 +24,7 @@ gulp.task('run', function(cb) {
         '**/node_modules/**',
         '*/build/**',
         '**/test/**',
+        '**/*.bundle.*',
         '.*' // .git, .idea, etc.
       ],
       watch: __dirname,
@@ -68,7 +69,7 @@ function findAndBuild(packageName, cb) {
   writeGlobalConfigModule();
 
   // build each
-  async.each(packages, build, cb);
+  async.eachSeries(packages, build, cb);
 }
 
 var packageCache;
@@ -97,13 +98,27 @@ function listPackages() {
     })
     .map(function(filePath) {
       return path.basename(path.dirname(filePath));
+    })
+    .sort(function(a, b) {
+      // temporary hack - ensure lbclient is built before html5
+      if (a === 'lbclient') return -1;
+      if (b === 'lbclient') return 1;
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
     });
 }
 
 function build(package, cb) {
-  var buildConfig = config.build[package];
   console.log('building', package);
-  configure(package, 'build', cb);
+  configure(package, 'build', function(err) {
+    if (err) {
+      console.error('%s build failed', package, err.stack);
+    } else {
+      console.log('%s was built', package);
+    }
+    cb(err);
+  });
 }
 
 function configure(package, scope, cb) {

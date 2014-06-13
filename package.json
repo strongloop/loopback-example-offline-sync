@@ -37,11 +37,11 @@
   },
   "dependencies": {
     "async": "~0.7.0",
-    "loopback": "2.0.0-beta3",
+    "loopback": "strongloop/loopback#2.0",
     "loopback-explorer": "~1.1.0",
     "loopback-connector-mongodb": "^1.2.4",
     "loopback-datasource-juggler": "2.0.0-beta1",
-    "loopback-boot": "strongloop/loopback-boot",
+    "loopback-boot": "strongloop/loopback-boot#2.0",
     "ejs": "^1.0.0",
     "morgan": "^1.1.1",
     "compression": "^1.0.3"

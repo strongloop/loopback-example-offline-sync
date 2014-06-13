@@ -1,11 +1,8 @@
 // dependencies
 var LOCAL_CONFIG = require('local.config');
-var loopback = require('loopback');
-var boot = require('loopback-boot');
 
 // loopback client
-var client = exports.client = loopback();
-boot(client);
+var client = exports.client = require('lbclient');
 
 // angular.js dependencies
 require('./bower_components/angular/angular.js');
@@ -23,6 +20,7 @@ var app = module.exports = angular.module('app', dependencies);
 // providers
 app.value('Todo', client.models.LocalTodo);
 app.value('sync', client.sync);
+app.value('network', client.network);
 
 // setup controllers
 // must require controllers in order for browserify

@@ -1,5 +1,5 @@
 {
-  "db": {
+  "remote": {
     "connector": "remote"
   },
   "local": {

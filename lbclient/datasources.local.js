@@ -1,7 +1,7 @@
 var LOCAL_CONFIG = require('local.config');
 
 module.exports = {
-  db: {
+  remote: {
     url: LOCAL_CONFIG.serverInfo.url
   }
 };

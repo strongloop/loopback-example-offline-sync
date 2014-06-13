@@ -4,13 +4,13 @@ var loopback = require('loopback');
 var explorer = require('loopback-explorer');
 var boot = require('loopback-boot');
 
+// model definitions
+require('../models');
+
 // server
 var server = module.exports = loopback();
 
-boot(server, {
-  appRootDir: __dirname,
-  modelsRootDir: path.resolve(__dirname, '..'),
-});
+boot(server, __dirname);
 
 // middleware
 server.use(loopback.logger('dev'));
