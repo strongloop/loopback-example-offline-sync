@@ -39,8 +39,9 @@ module.exports = function(Todo/*, Base*/) {
     }
   };
 
-  loopback.remoteMethod(Todo.stats, {
+  Todo.remoteMethod('stats', {
     accepts: {arg: 'filter', type: 'object'},
-    returns: {arg: 'stats', type: 'object'}
-  });
+    returns: {arg: 'stats', type: 'object'},
+    http: { path: '/stats' }
+  }, Todo.stats);
 };
