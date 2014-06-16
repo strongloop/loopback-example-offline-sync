@@ -4,9 +4,6 @@ var loopback = require('loopback');
 var explorer = require('loopback-explorer');
 var boot = require('loopback-boot');
 
-// model definitions
-require('../models');
-
 // server
 var server = module.exports = loopback();
 
