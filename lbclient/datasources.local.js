@@ -1,7 +1,7 @@
-var LOCAL_CONFIG = require('local.config');
+var GLOBAL_CONFIG = require('../global-config');
 
 module.exports = {
   remote: {
-    url: LOCAL_CONFIG.serverInfo.url
+    url: GLOBAL_CONFIG.restApiUrl
   }
 };

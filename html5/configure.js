@@ -51,15 +51,6 @@ exports.global = function(env, global) {
 
 exports.local = function configure(env, global, local) {
   // NOTE: this config will be available in the browser
-  local.serverInfo = {
-    api: global.api,
-    url: global.api.protocol
-        + '://'
-        + global.api.host
-        + ':'
-        + global.api.port
-        + global.api.root
-  };
   local.routes = global.routes;
 }
 

@@ -4,23 +4,6 @@ var fs = require('fs');
 var browserify = require('browserify');
 var boot = require('loopback-boot');
 
-exports.global = function(env, global) {
-};
-
-exports.local = function configure(env, global, local) {
-  // NOTE: this config will be available in the browser
-  local.serverInfo = {
-    api: global.api,
-    url: global.api.protocol
-        + '://'
-        + global.api.host
-        + ':'
-        + global.api.port
-        + global.api.root
-  };
-  local.routes = global.routes;
-};
-
 exports.build = function(env, global, local, cb) {
   var b = browserify({ basedir: __dirname });
   b.require('./' + pkg.main, { expose: 'lbclient' });
