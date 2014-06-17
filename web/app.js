@@ -5,7 +5,7 @@ var app = loopback();
 var CONFIG = require('global.config');
 var LOCAL_CONFIG = require('local.config');
 var HOME_TEMPLATE = LOCAL_CONFIG.homeTemplate;
-var api = require('api');
+var api = require('rest');
 
 // middleware
 app.use(loopback.compress());
