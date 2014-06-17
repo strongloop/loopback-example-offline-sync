@@ -7,38 +7,6 @@ var browserify = require('browserify');
 var buildDir = path.resolve(__dirname, 'build');
 
 exports.global = function(env, global) {
-  // routes
-  global.routes = {
-    '/': {
-      controller: 'HomeCtrl',
-      templateUrl: '/views/welcome.html'
-    },
-    '/me': {
-      controller: 'UserCtrl',
-      templateUrl: '/views/me.html',
-    },
-    '/my/todos/:status': {
-      controller: 'TodoCtrl',
-      templateUrl: '/views/todos.html'
-    },
-    '/my/todos': {
-      controller: 'TodoCtrl',
-      templateUrl: '/views/todos.html'
-    },
-    '/login': {
-      controller: 'LoginCtrl',
-      templateUrl: '/views/login.html'
-    },
-    '/register': {
-      controller: 'RegisterCtrl',
-      templateUrl: '/views/register.html'
-    },
-    '/debug': {
-      controller: 'ChangeCtrl',
-      templateUrl: '/views/changes.html'
-    }
-  };
-
   global.bundle = 'bundle.' + pkg.version;
   if(!isDev(env)) global.bundle += '.min';
   global.bundle += '.js';
@@ -47,11 +15,6 @@ exports.global = function(env, global) {
   global.clientBundle = path.join(buildDir, 'client.' + global.bundle);
   global.bundleURL = '/' + global.bundle;
   global.clientURL = '/client.' + global.bundle;
-}
-
-exports.local = function configure(env, global, local) {
-  // NOTE: this config will be available in the browser
-  local.routes = global.routes;
 }
 
 exports.build = function(env, global, local, cb) {

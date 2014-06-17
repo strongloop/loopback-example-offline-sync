@@ -1,6 +1,3 @@
-// dependencies
-var LOCAL_CONFIG = require('local.config');
-
 // loopback client
 var client = exports.client = require('lbclient');
 
@@ -9,7 +6,7 @@ require('./bower_components/angular/angular.js');
 require('./bower_components/angular-route/angular-route.js');
 
 // routes
-var routes = LOCAL_CONFIG.routes;
+var routes = require('./config.routes');
 
 // angular dependencies
 var dependencies = ['ngRoute'];

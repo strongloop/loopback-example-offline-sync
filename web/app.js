@@ -23,7 +23,7 @@ app.engine('html', require('ejs').renderFile);
 app.set('views', path.join(__dirname, 'views'));
 
 // html5 routes
-var routes = CONFIG.routes;
+var routes = require('html5/config.routes');
 var APP_TEMPLATE = app.get('appTemplate');
 Object
   .keys(routes)
