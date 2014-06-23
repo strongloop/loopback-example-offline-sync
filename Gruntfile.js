@@ -2,6 +2,8 @@
 'use strict';
 
 var buildClientBundle = require('./lbclient/build');
+var fs = require('fs');
+var path = require('path');
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -75,7 +77,14 @@ module.exports = function (grunt) {
         options: {
           livereload: '<%= connect.options.livereload %>'
         },
-      }
+      },
+      config: {
+        files: ['<%= yeoman.app %>/config/*.json'],
+        tasks: ['build-config'],
+        options: {
+          livereload: '<%= connect.options.livereload %>'
+        },
+      },
     },
 
     // The actual grunt server settings
@@ -166,7 +175,8 @@ module.exports = function (grunt) {
         }]
       },
       server: '.tmp',
-      lbclient: 'lbclient/browser.bundle.js'
+      lbclient: 'lbclient/browser.bundle.js',
+      config: '<%= yeoman.app %>/config/bundle.js'
     },
 
     // Add vendor prefixed styles
@@ -378,9 +388,37 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build-lbclient', 'Build lbclient browser bundle', function(target) {
+  grunt.registerTask('build-lbclient', 'Build lbclient browser bundle', function() {
     var done = this.async();
     buildClientBundle(process.env.NODE_ENV || 'development', done);
+  });
+
+  grunt.registerTask('build-config', 'Build confg.js from JSON files', function() {
+    var ngapp = path.resolve(__dirname, appConfig.app);
+    var configDir = path.join(ngapp, 'config');
+    var config = {};
+
+    fs.readdirSync(configDir)
+      .forEach(function(f) {
+        if (f === 'bundle.js') return;
+
+        var extname = path.extname(f);
+        if (extname !== '.json') {
+          grunt.warn('Ignoring ' + f + ' (' + extname + ')');
+          return;
+        }
+
+        var fullPath = path.resolve(configDir, f);
+        var key = path.basename(f, extname);
+
+        config[key] = JSON.parse(fs.readFileSync(fullPath), 'utf-8');
+      });
+
+    var outputPath = path.resolve(ngapp, 'config', 'bundle.js');
+    var content = 'window.CONFIG = ' +
+        JSON.stringify(config, null, 2) +
+        ';\n';
+    fs.writeFileSync(outputPath, content, 'utf-8');
   });
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
@@ -391,6 +429,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'build-lbclient',
+      'build-config',
       'wiredep',
       'concurrent:server',
       'autoprefixer',
@@ -407,6 +446,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'clean:server',
     'build-lbclient',
+    'build-config',
     'concurrent:test',
     'autoprefixer',
     'connect:test',
@@ -416,6 +456,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'build-lbclient',
+    'build-config',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',

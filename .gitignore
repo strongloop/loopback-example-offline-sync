@@ -11,6 +11,7 @@ build
 global.config.js
 bower_components
 ngapp/dist
+ngapp/config/bundle.js
 html5/build
 lib-cov
 local.config.js
