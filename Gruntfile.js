@@ -348,6 +348,7 @@ module.exports = function (grunt) {
     karma: {
       unit: {
         configFile: '<%= yeoman.app %>/test/karma.conf.js',
+        browsers: [ 'PhantomJS' ],
         singleRun: true
       }
     }
