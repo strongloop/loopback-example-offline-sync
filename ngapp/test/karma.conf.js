@@ -16,9 +16,11 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      '../bower_components/es5-shim/es5-shim.js',
       '../bower_components/angular/angular.js',
       '../bower_components/angular-mocks/angular-mocks.js',
       '../bower_components/angular-route/angular-route.js',
+      '../lbclient/browser.bundle.js',
       'scripts/**/*.js',
       'test/mock/**/*.js',
       'test/spec/**/*.js'
