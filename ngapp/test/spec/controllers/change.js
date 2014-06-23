@@ -1,22 +1,22 @@
 'use strict';
 
-describe('Controller: AboutCtrl', function () {
+describe('Controller: ChangeCtrl', function () {
 
   // load the controller's module
   beforeEach(module('loopbackExampleFullStackApp'));
 
-  var AboutCtrl,
+  var ChangeCtrl,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    AboutCtrl = $controller('AboutCtrl', {
+    ChangeCtrl = $controller('ChangeCtrl', {
       $scope: scope
     });
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.awesomeThings.length).toBe(3);
+  it('should attach `clearLocalStorage()` to the scope', function () {
+    expect(typeof scope.clearLocalStorage).toBe('function');
   });
 });
