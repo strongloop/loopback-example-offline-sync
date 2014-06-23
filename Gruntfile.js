@@ -1,6 +1,8 @@
 // Generated on 2014-06-23 using generator-angular 0.9.1
 'use strict';
 
+var buildClientBundle = require('./lbclient/build');
+
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -60,6 +62,19 @@ module.exports = function (grunt) {
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
+      },
+      lbclient: {
+        files: [
+          'lbclient/models/*',
+          'lbclient/app*',
+          'lbclient/datasources*',
+          'lbclient/models*',
+          'lbclient/build.js'
+        ],
+        tasks: ['build-lbclient'],
+        options: {
+          livereload: '<%= connect.options.livereload %>'
+        },
       }
     },
 
@@ -150,7 +165,8 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      server: '.tmp'
+      server: '.tmp',
+      lbclient: 'lbclient/browser.bundle.js'
     },
 
     // Add vendor prefixed styles
@@ -362,6 +378,10 @@ module.exports = function (grunt) {
     }
   });
 
+  grunt.registerTask('build-lbclient', 'Build lbclient browser bundle', function(target) {
+    var done = this.async();
+    buildClientBundle(process.env.NODE_ENV || 'development', done);
+  });
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -370,6 +390,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'build-lbclient',
       'wiredep',
       'concurrent:server',
       'autoprefixer',
@@ -385,6 +406,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'clean:server',
+    'build-lbclient',
     'concurrent:test',
     'autoprefixer',
     'connect:test',
@@ -393,6 +415,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'build-lbclient',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',

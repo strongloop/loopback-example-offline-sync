@@ -4,7 +4,7 @@ var fs = require('fs');
 var browserify = require('browserify');
 var boot = require('loopback-boot');
 
-exports.build = function(env, global, local, cb) {
+module.exports = function buildBrowserBundle(env, callback) {
   var b = browserify({ basedir: __dirname });
   b.require('./' + pkg.main, { expose: 'lbclient' });
 
@@ -14,24 +14,21 @@ exports.build = function(env, global, local, cb) {
       env: env
     }, b);
   } catch(err) {
-    return cb(err);
+    return callback(err);
   }
 
   var bundlePath = path.resolve(__dirname, 'browser.bundle.js');
-  var out = fs.createWriteStream(path.resolve(__dirname, bundlePath));
+  var out = fs.createWriteStream(bundlePath);
+  var isDevEnv = ~['debug', 'development', 'test'].indexOf(env);
 
   b.bundle({
     // TODO(bajtos) debug should be always true, the sourcemaps should be
     // saved to a standalone file when !isDev(env)
-    debug: isDev(env)
+    debug: isDevEnv
   })
-    .on('error', cb)
+    .on('error', callback)
     .pipe(out);
 
-  out.on('error', cb);
-  out.on('close', cb);
+  out.on('error', callback);
+  out.on('close', callback);
 };
-
-function isDev(env) {
-  return ~['debug', 'development', 'test'].indexOf(env);
-}

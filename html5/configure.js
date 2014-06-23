@@ -3,6 +3,7 @@ var path = require('path');
 var pkg = require('./package.json');
 var fs = require('fs');
 var browserify = require('browserify');
+var buildClientBundle = require('../lbclient/build');
 
 var buildDir = path.resolve(__dirname, 'build');
 
@@ -21,6 +22,9 @@ exports.build = function(env, global, local, cb) {
   async.parallel([
     function(next) {
       createBundle(env, global, next);
+    },
+    function(next) {
+      buildClientBundle(env, next);
     },
     function(next) {
       copyClientBundle(global, next);

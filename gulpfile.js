@@ -100,9 +100,6 @@ function listPackages() {
       return path.basename(path.dirname(filePath));
     })
     .sort(function(a, b) {
-      // temporary hack - ensure lbclient is built before html5
-      if (a === 'lbclient') return -1;
-      if (b === 'lbclient') return 1;
       if (a < b) return -1;
       if (a > b) return 1;
       return 0;
