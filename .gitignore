@@ -6,9 +6,11 @@
 *.pid
 *.seed
 .DS_Store
+.tmp
 build
 global.config.js
-html5/bower_components/
+bower_components
+ngapp/dist
 html5/build
 lib-cov
 local.config.js
