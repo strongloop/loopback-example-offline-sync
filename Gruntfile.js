@@ -406,12 +406,10 @@ module.exports = function (grunt) {
     var keepAlive = this.flags.keepalive || connectConfig.keepalive;
 
     var server = require('./server');
-    server.listen(connectConfig.port, connectConfig.hostname)
+    server.set('port', connectConfig.port);
+    server.set('host', connectConfig.hostname);
+    server.start()
       .on('listening', function() {
-        var address = this.address();
-        var hostname = connectConfig.hostname || '0.0.0.0';
-        var target = 'http://' + hostname + ':' + address.port;
-        grunt.log.writeln('Started web server on ' + target);
         if (!keepAlive) done();
       })
       .on('error', function(err) {
