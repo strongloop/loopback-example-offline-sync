@@ -405,7 +405,7 @@ module.exports = function (grunt) {
 
     var keepAlive = this.flags.keepalive || connectConfig.keepalive;
 
-    var server = require('./web/app');
+    var server = require('./server');
     server.listen(connectConfig.port, connectConfig.hostname)
       .on('listening', function() {
         var address = this.address();
