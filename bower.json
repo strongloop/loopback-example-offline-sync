@@ -7,15 +7,23 @@
   ],
   "license": "MIT",
   "private": true,
+  "appPath": "ngapp",
+  "testPath": "ngapp/test/spec",
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "html5/bower_components",
+    "**/bower_components",
     "test",
     "tests"
   ],
   "dependencies": {
+    "angular": "~1.2.16",
+    "json3": "~3.3.1",
+    "es5-shim": "~3.1.0",
     "angular-route": "~1.2.16"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.16",
+    "angular-scenario": "~1.2.16"
   }
 }
