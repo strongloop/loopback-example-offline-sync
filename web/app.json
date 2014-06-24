@@ -1,6 +1,3 @@
 {
-  "host": "localhost",
-  "title": "Todo App ({{env}})",
-  "homeTemplate": "home.ejs",
-  "appTemplate": "app.ejs"
+  "host": "localhost"
 }

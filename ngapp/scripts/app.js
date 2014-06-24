@@ -12,7 +12,7 @@ angular
   .module('loopbackExampleFullStackApp', [
     'ngRoute'
   ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, $locationProvider) {
     Object.keys(window.CONFIG.routes)
       .forEach(function(route) {
         var routeDef = window.CONFIG.routes[route];
@@ -23,4 +23,6 @@ angular
       .otherwise({
         redirectTo: '/'
       });
+
+    $locationProvider.html5Mode(true);
   });
