@@ -95,25 +95,6 @@ module.exports = function (grunt) {
         hostname: 'localhost',
         livereload: 35729
       },
-      livereload: {
-        options: {
-          open: true,
-          middleware: function (connect) {
-            return [
-              connect.static('.tmp'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
-              connect().use(
-                '/lbclient',
-                connect.static('./lbclient')
-              ),
-              connect.static(appConfig.app)
-            ];
-          }
-        }
-      },
       test: {
         options: {
           port: 9001,
@@ -132,12 +113,6 @@ module.exports = function (grunt) {
               connect.static(appConfig.app)
             ];
           }
-        }
-      },
-      dist: {
-        options: {
-          open: true,
-          base: '<%= yeoman.dist %>'
         }
       }
     },
@@ -421,9 +396,37 @@ module.exports = function (grunt) {
     fs.writeFileSync(outputPath, content, 'utf-8');
   });
 
-  grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
+  grunt.registerTask('run', 'Start the app server', function() {
+    var done = this.async();
+
+    var connectConfig = grunt.config.get().connect.options;
+    process.env.LIVE_RELOAD = connectConfig.livereload;
+    process.env.NODE_ENV = this.args[0];
+
+    var keepAlive = this.flags.keepalive || connectConfig.keepalive;
+
+    var server = require('./web/app');
+    server.listen(connectConfig.port, connectConfig.hostname)
+      .on('listening', function() {
+        var address = this.address();
+        var hostname = connectConfig.hostname || '0.0.0.0';
+        var target = 'http://' + hostname + ':' + address.port;
+        grunt.log.writeln('Started web server on ' + target);
+        if (!keepAlive) done();
+      })
+      .on('error', function(err) {
+        if (err.code === 'EADDRINUSE') {
+          grunt.fatal('Port ' + connectConfig.port +
+            ' is already in use by another process.');
+        } else {
+          grunt.fatal(err);
+        }
+      });
+  });
+
+  grunt.registerTask('serve', 'Compile then start the app server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'connect:dist:keepalive']);
+      return grunt.task.run(['build', 'run:dist:keepalive']);
     }
 
     grunt.task.run([
@@ -433,7 +436,7 @@ module.exports = function (grunt) {
       'wiredep',
       'concurrent:server',
       'autoprefixer',
-      'connect:livereload',
+      'run:development',
       'watch'
     ]);
   });
