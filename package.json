@@ -7,8 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "gulp test",
-    "build": "bower install; gulp build"
+    "test": "grunt test",
+    "build": "bower install; grunt build"
   },
   "repository": {
     "type": "git",
@@ -52,17 +52,13 @@
     "grunt-svgmin": "^0.4.0",
     "grunt-usemin": "^2.1.1",
     "grunt-wiredep": "^1.7.0",
-    "gulp": "~3.6.0",
-    "gulp-nodemon": "~1.0.2",
     "jshint-stylish": "^0.2.0",
     "karma": "^0.12.16",
     "karma-chrome-launcher": "^0.1.4",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
     "load-grunt-tasks": "^0.4.0",
-    "shelljs": "~0.2.6",
-    "time-grunt": "^0.3.1",
-    "uglifyify": "~2.1.1"
+    "time-grunt": "^0.3.1"
   },
   "dependencies": {
     "async": "~0.7.0",
