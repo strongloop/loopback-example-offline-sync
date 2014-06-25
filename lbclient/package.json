@@ -1,4 +1,4 @@
 {
   "name": "client",
-  "main": "app-lbclient.js"
+  "main": "lbclient.js"
 }
