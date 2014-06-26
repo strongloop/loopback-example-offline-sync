@@ -65,10 +65,10 @@
     "compression": "^1.0.3",
     "ejs": "^1.0.0",
     "errorhandler": "^1.1.1",
-    "loopback": "strongloop/loopback#2.0",
-    "loopback-boot": "strongloop/loopback-boot#2.0",
+    "loopback": "~2.0.0-beta4",
+    "loopback-boot": "~2.0.0-beta1",
     "loopback-connector-mongodb": "^1.2.4",
-    "loopback-datasource-juggler": "2.0.0-beta2",
+    "loopback-datasource-juggler": "~2.0.0-beta2",
     "loopback-explorer": "~1.1.0",
     "morgan": "^1.1.1"
   },
