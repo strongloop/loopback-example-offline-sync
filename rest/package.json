@@ -1,4 +1,4 @@
 {
   "name": "rest",
-  "main": "app-rest.js"
+  "main": "rest.js"
 }

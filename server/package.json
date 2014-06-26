@@ -1,4 +1,4 @@
 {
   "name": "server",
-  "main": "app-server.js"
+  "main": "server.js"
 }
