@@ -11,9 +11,10 @@
           <div ng-if="conflict.sourceChange.type() === 'delete'">
             <strong>Deleted</strong>
           </div>
-          <table ng-if="conflict.sourceChange.type() === 'update'">
+          <table ng-if="conflict.sourceChange.type() !== 'delete'">
             <tr>
               <th>id</th>
+              <th>change</th>
               <th>title</th>
             </tr>
             <tr>
@@ -30,9 +31,10 @@
           <div ng-if="conflict.targetChange.type() === 'delete'">
             <strong>Deleted</strong>
           </div>
-          <table ng-if="conflict.targetChange.type() === 'update'">
+          <table ng-if="conflict.targetChange.type() !== 'delete'">
             <tr>
               <th>id</th>
+              <th>change</th>
               <th>title</th>
             </tr>
             <tr>
