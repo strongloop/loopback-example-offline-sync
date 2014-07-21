@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "sources": ["../models"]
+    "sources": ["../common/models"]
   },
   "Todo": {
     "dataSource": "db"
