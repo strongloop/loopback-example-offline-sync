@@ -1,4 +1,4 @@
-var GLOBAL_CONFIG = require('../global-config');
+var GLOBAL_CONFIG = require('../../global-config');
 
 module.exports = {
   remote: {

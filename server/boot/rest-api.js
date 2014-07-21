@@ -1,5 +1,4 @@
-module.exports = function(app) {
-  var restApp = require('../../rest');
-  var restApiRoot = app.get('restApiRoot');
-  app.use(restApiRoot, restApp);
+module.exports = function mountRestApi(server) {
+  var restApiRoot = server.get('restApiRoot');
+  server.use(restApiRoot, server.loopback.rest());
 };

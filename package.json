@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/strongloop/loopback-example-full-stack",
   "devDependencies": {
-    "async": "~0.7.0",
     "bower": "^1.3.3",
     "browserify": "~4.1.2",
     "connect-livereload": "^0.4.0",
@@ -61,16 +60,14 @@
     "time-grunt": "^0.3.1"
   },
   "dependencies": {
-    "async": "~0.7.0",
+    "async": "~0.9.0",
     "compression": "^1.0.3",
-    "ejs": "^1.0.0",
     "errorhandler": "^1.1.1",
-    "loopback": "~2.0.0-beta4",
-    "loopback-boot": "~2.0.0-beta1",
+    "loopback": "~2.0.0-beta7",
+    "loopback-boot": "~2.0.0-beta3",
     "loopback-connector-mongodb": "^1.2.4",
-    "loopback-datasource-juggler": "~2.0.0-beta2",
-    "loopback-explorer": "~1.1.0",
-    "morgan": "^1.1.1"
+    "loopback-datasource-juggler": "~2.0.0-beta4",
+    "loopback-explorer": "^1.2.2"
   },
   "engines": {
     "node": ">=0.10.0"

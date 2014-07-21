@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "sources": ["../models", "./models"]
+    "sources": ["../../common/models", "./models"]
   },
   "Todo": {
     "dataSource": "remote"

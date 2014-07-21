@@ -1,5 +1,5 @@
 module.exports = function(app) {
-  var routes = require('../../ngapp/config/routes');
+  var routes = require('../../client/ngapp/config/routes');
   Object
     .keys(routes)
     .forEach(function(route) {

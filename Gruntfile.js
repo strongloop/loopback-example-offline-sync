@@ -1,7 +1,7 @@
 // Generated on 2014-06-23 using generator-angular 0.9.1
 'use strict';
 
-var buildClientBundle = require('./lbclient/build');
+var buildClientBundle = require('./client/lbclient/build');
 var fs = require('fs');
 var path = require('path');
 
