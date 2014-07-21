@@ -7,7 +7,7 @@ module.exports = function(app) {
 
   app.use(serveDir(projectPath('.tmp')));
   app.use('/bower_components', serveDir(projectPath('bower_components')));
-  app.use('/lbclient', serveDir(projectPath('lbclient')));
+  app.use('/lbclient', serveDir(projectPath('client/lbclient')));
 };
 
 function projectPath(relative) {

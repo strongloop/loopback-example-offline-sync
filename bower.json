@@ -7,8 +7,8 @@
   ],
   "license": "MIT",
   "private": true,
-  "appPath": "ngapp",
-  "testPath": "ngapp/test/spec",
+  "appPath": "client/ngapp",
+  "testPath": "client/ngapp/test/spec",
   "ignore": [
     "**/.*",
     "node_modules",
