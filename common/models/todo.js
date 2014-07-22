@@ -1,7 +1,7 @@
 var loopback = require('loopback');
 var async = require('async');
 
-module.exports = function(Todo/*, Base*/) {
+module.exports = function(Todo) {
 
   Todo.definition.properties.created.default = Date.now;
 
