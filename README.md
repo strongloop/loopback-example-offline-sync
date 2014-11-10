@@ -21,14 +21,16 @@ following features:
 
 4. `npm install grunt-cli -g` - skip if you have grunt-cli already installed
 
-4. `bower install` - install front-end scripts
+5. `npm install bower -g` - skip if you have bower already installed
 
-5. `mongod` - make sure mongodb is running if you want to run with
+6. `bower install` - install front-end scripts
+
+7. `mongod` - make sure mongodb is running if you want to run with
 `NODE_ENV=production`
 
-6. `grunt serve` - build and run the entire project in development mode
+8. `grunt serve` - build and run the entire project in development mode
 
-7. open `http://localhost:9000` - point a browser at the running app
+9. open `http://localhost:3000` - point a browser at the running app
 
 ## Project layout
 
