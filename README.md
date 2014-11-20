@@ -122,8 +122,7 @@ The instructions assume the name of the new model is 'MyModel'.
 
     ```json
     {
-      {
-        "MyModel": {
+      "MyModel": {
         "dataSource": "local"
       },
       "RemoteMyModel": {
