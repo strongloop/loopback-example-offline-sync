@@ -362,7 +362,28 @@ module.exports = function (grunt) {
         browsers: [ 'PhantomJS' ],
         singleRun: true
       }
+    },
+
+    // Server Tests
+    mochaTest: {
+      common: {
+        options: {
+          reporter: 'spec',
+          quiet: false,
+          clearRequireCache: false
+        },
+        src: ['common/models/test/**/*.js']
+      },
+      server: {
+        options: {
+          reporter: 'spec',
+          quiet: false,
+          clearRequireCache: false
+        },
+        src: ['server/test/**/*.js']
+      }
     }
+
   });
 
   grunt.registerTask('build-lbclient', 'Build lbclient browser bundle', function() {
@@ -446,7 +467,7 @@ module.exports = function (grunt) {
     grunt.task.run(['serve:' + target]);
   });
 
-  grunt.registerTask('test', [
+  grunt.registerTask('test:client', [
     'clean:server',
     'build-lbclient',
     'build-config',
@@ -454,6 +475,20 @@ module.exports = function (grunt) {
     'autoprefixer',
     'connect:test',
     'karma'
+  ]);
+
+  grunt.registerTask('test:common', [
+    'mochaTest:common'
+  ]);
+
+  grunt.registerTask('test:server', [
+    'mochaTest:server'
+  ]);
+
+  grunt.registerTask('test', [
+    'test:server',
+    'test:common',
+    'test:client'
   ]);
 
   grunt.registerTask('build', [
