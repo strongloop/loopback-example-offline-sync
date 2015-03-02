@@ -46,6 +46,7 @@
     "grunt-filerev": "^0.2.1",
     "grunt-google-cdn": "^0.4.0",
     "grunt-karma": "^0.8.3",
+    "grunt-mocha-test": "^0.12.6",
     "grunt-newer": "^0.7.0",
     "grunt-ng-annotate": "^0.8.0",
     "grunt-svgmin": "^0.4.0",
@@ -57,6 +58,8 @@
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
     "load-grunt-tasks": "^0.6.0",
+    "loopback-testing": "^1.0.4",
+    "mocha": "^2.1.0",
     "time-grunt": "^0.4.0"
   },
   "dependencies": {
