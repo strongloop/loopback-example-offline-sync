@@ -15,7 +15,7 @@ following features:
 
 1. Clone the repo.
 
-2. `cd loopback-example-full-stack`
+2. `cd loopback-example-offline-sync`
 
 3. `npm install` - install the root package dependencies
 
