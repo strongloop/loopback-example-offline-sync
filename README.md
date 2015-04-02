@@ -1,4 +1,4 @@
-# Loopback Examples: Full Stack
+# loopback-example-offline-sync
 
 **Note: this example uses `loopback@2.0.0` and `loopback-boot@2.0.0`!**
 
