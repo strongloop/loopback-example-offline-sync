@@ -20,7 +20,8 @@ describe('Todo', function() {
       });
 
       it('should respond with a new todo', function() {
-        assert(this.res.body.id.match(/t-\d+/));
+        var guidRegex = /[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}/;
+        assert(this.res.body.id.match(guidRegex));
       });
     });
 

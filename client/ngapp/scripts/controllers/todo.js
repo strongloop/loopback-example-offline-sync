@@ -44,8 +44,14 @@ angular.module('loopbackExampleFullStackApp')
     if(err) error(err);
   }
 
-  Todo.on('changed', onChange);
-  Todo.on('deleted', onChange);
+  Todo.observe('after save', function(ctx, next) {
+    next();
+    onChange();
+  });
+  Todo.observe('after delete', function(ctx, next) {
+    next();
+    onChange();
+  });
 
   // Monitor the current route for changes and adjust the filter accordingly.
   $scope.$on('$routeChangeSuccess', function () {
@@ -56,9 +62,11 @@ angular.module('loopbackExampleFullStackApp')
   });
 
   $scope.addTodo = function () {
-    var todo = new Todo({title: $scope.newTodo});
-    todo.save();
-    $scope.newTodo = '';
+    Todo.create({title: $scope.newTodo})
+      .then(function() {
+        $scope.newTodo = '';
+        $scope.$apply();
+      });
   };
 
   $scope.editTodo = function (todo) {
@@ -137,23 +145,15 @@ angular.module('loopbackExampleFullStackApp')
   });
 
   $scope.resolveUsingSource = function(conflict) {
-    conflict.resolve(refreshConflicts);
+    conflict.resolveUsingSource(refreshConflicts);
   };
 
   $scope.resolveUsingTarget = function(conflict) {
-    if(conflict.targetChange.type() === 'delete') {
-      conflict.SourceModel.deleteById(conflict.modelId, refreshConflicts);
-    } else {
-      var m = new conflict.SourceModel(conflict.target);
-      m.save(refreshConflicts);
-    }
+    conflict.resolveUsingTarget(refreshConflicts);
   };
 
   $scope.resolveManually = function(conflict) {
-    conflict.manual.save(function(err) {
-      if(err) return errorCallback(err);
-      conflict.resolve(refreshConflicts);
-    });
+    conflict.resolveManually(conflict.manual, refreshConflicts);
   };
 
   function refreshConflicts() {
