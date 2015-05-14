@@ -1,7 +1,6 @@
 {
   "name": "user",
   "base": "PersistedModel",
-  "trackChanges": true,
   "properties": {
     "id": {
       "id": true,

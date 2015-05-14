@@ -21,3 +21,5 @@ npm-debug.log
 pids
 public/bundle.js
 results
+server/datasources.local.js
+db.json

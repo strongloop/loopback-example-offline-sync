@@ -2,7 +2,7 @@
   "_meta": {
     "sources": ["../../common/models", "./models"]
   },
-  "Todo": {
+  "RemoteTodo": {
     "dataSource": "remote"
   },
   "LocalTodo": {
