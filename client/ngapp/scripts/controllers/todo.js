@@ -9,8 +9,8 @@
  */
 angular.module('loopbackExampleFullStackApp')
   .controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, Todo,
-                                            $location, sync, network, proquint,
-                                            Buffer) {
+                                            $location, sync, network,
+                                            getReadableModelId) {
   $scope.todos = [];
 
   $scope.newTodo = '';
@@ -128,10 +128,6 @@ angular.module('loopbackExampleFullStackApp')
   Todo.on('conflicts', function(conflicts) {
     $scope.localConflicts = conflicts;
 
-    function getSimpleModelId(modelId) {
-      return proquint.encode(new Buffer(modelId.substring(0, 8), 'binary'));
-    }
-
     conflicts.forEach(function(conflict) {
       conflict.type(function(err, type) {
         conflict.type = type;
@@ -142,9 +138,9 @@ angular.module('loopbackExampleFullStackApp')
           $scope.$apply();
         });
         conflict.changes(function(err, source, target) {
-          source.modelId = getSimpleModelId(source.modelId);
+          source.modelId = getReadableModelId(source.modelId);
           conflict.sourceChange = source;
-          target.modelId = getSimpleModelId(target.modelId);
+          target.modelId = getReadableModelId(target.modelId);
           conflict.targetChange = target;
           $scope.$apply();
         });
