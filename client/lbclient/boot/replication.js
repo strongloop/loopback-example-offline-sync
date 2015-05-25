@@ -7,6 +7,8 @@
 //      target: 'Todo',
 //      mode: 'push' | 'pull' | 'bidi'
 //    }}}
+var proquint = require('proquint');
+
 module.exports = function(client) {
   var LocalTodo = client.models.LocalTodo;
   var RemoteTodo = client.models.RemoteTodo;
@@ -51,4 +53,8 @@ module.exports = function(client) {
   });
 
   client.sync = sync;
+
+  client.getReadableModelId = function(modelId) {
+    return proquint.encode(new Buffer(modelId.substring(0, 8), 'binary'));
+  };
 };
