@@ -1,3 +1,5 @@
+'use strict';
+
 // TODO(bajtos) Move the bi-di replication to loopback core,
 // add model settings to enable the replication.
 // Example:
@@ -37,7 +39,7 @@ module.exports = function(client) {
           since.pull,
           function pulled(err, conflicts, cps) {
             since.pull = cps;
-            cb && cb();
+            if (cb) cb();
           });
       });
   }

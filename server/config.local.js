@@ -1,6 +1,9 @@
+'use strict';
+
 var GLOBAL_CONFIG = require('../global-config');
 
-var isDevEnv = (process.env.NODE_ENV || 'development') === 'development';
+var env = (process.env.NODE_ENV || 'development');
+var isDevEnv = env === 'development' || env === 'test';
 
 module.exports = {
   hostname: GLOBAL_CONFIG.hostname,

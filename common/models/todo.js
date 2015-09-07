@@ -1,4 +1,5 @@
-var loopback = require('loopback');
+'use strict';
+
 var async = require('async');
 
 module.exports = function(Todo) {

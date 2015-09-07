@@ -51,7 +51,9 @@ describe('Todo', function() {
         it('should contain the todo', function() {
           var found = false;
           this.res.body.forEach(function(todo) {
-            if(todo.id === '123') found = true;
+            if (todo.id === '123') {
+              found = true;
+            }
           });
           assert(found);
         });
