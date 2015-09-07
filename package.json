@@ -1,5 +1,5 @@
 {
-  "name": "loopback-example-full-stack",
+  "name": "loopback-example-offline-sync",
   "version": "0.0.1",
   "description": "LoopBack browser and server example",
   "main": "server/server.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/strongloop/loopback-example-full-stack.git"
+    "url": "git://github.com/strongloop/loopback-example-offline-sync.git"
   },
   "keywords": [
     "loopback",
@@ -24,9 +24,9 @@
   "author": "Ritchie Martori",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/strongloop/loopback-example-full-stack/issues"
+    "url": "https://github.com/strongloop/loopback-example-offline-sync/issues"
   },
-  "homepage": "https://github.com/strongloop/loopback-example-full-stack",
+  "homepage": "https://github.com/strongloop/loopback-example-offline-sync",
   "devDependencies": {
     "bower": "^1.3.8",
     "browserify": "~4.2.3",
