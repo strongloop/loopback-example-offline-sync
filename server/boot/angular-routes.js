@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(app) {
   var routes = require('../../client/ngapp/config/routes');
   Object

@@ -1,3 +1,5 @@
+'use strict';
+
 var GLOBAL_CONFIG = require('../global-config');
 
 var env = (process.env.NODE_ENV || 'development');

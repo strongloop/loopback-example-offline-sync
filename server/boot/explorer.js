@@ -1,3 +1,5 @@
+'use strict';
+
 var explorer = require('loopback-explorer');
 
 module.exports = function(server) {

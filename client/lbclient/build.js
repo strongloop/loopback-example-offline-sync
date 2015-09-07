@@ -1,3 +1,5 @@
+'use strict';
+
 var path = require('path');
 var pkg = require('./package.json');
 var fs = require('fs');
@@ -19,7 +21,7 @@ module.exports = function buildBrowserBundle(env, callback) {
 
   var bundlePath = path.resolve(__dirname, 'browser.bundle.js');
   var out = fs.createWriteStream(bundlePath);
-  var isDevEnv = ~['debug', 'development', 'test'].indexOf(env);
+  var isDevEnv = ['debug', 'development', 'test'].indexOf(env) !== -1;
 
   b.bundle({
     // TODO(bajtos) debug should be always true, the sourcemaps should be

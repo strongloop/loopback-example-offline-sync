@@ -1,6 +1,7 @@
 /*
  * Global configuration shared by components.
  */
+'use strict';
 
 var url = require('url');
 

@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(server) {
 
   // TODO(ritch) this should be unecessary soon....

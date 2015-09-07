@@ -1,3 +1,5 @@
+'use strict';
+
 var path = require('path');
 var loopback = require('loopback');
 var boot = require('loopback-boot');
