@@ -7,8 +7,9 @@
     "test": "test"
   },
   "scripts": {
+    "install": "bower install",
     "test": "grunt test",
-    "build": "bower install; grunt build"
+    "build": "grunt build"
   },
   "repository": {
     "type": "git",
