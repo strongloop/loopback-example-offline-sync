@@ -54,6 +54,7 @@
     "grunt-svgmin": "^0.4.0",
     "grunt-usemin": "^2.3.0",
     "grunt-wiredep": "^1.8.0",
+    "jshint": "^2.8.0",
     "jshint-stylish": "^0.4.0",
     "karma": "^0.12.17",
     "karma-chrome-launcher": "^0.1.4",
