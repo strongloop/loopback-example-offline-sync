@@ -30,13 +30,13 @@ module.exports = function(client) {
   var since = { push: -1, pull: -1 };
   function sync(cb) {
     LocalTodo.replicate(
-      RemoteTodo,
       since.push,
+      RemoteTodo,
       function pushed(err, conflicts, cps) {
         since.push = cps;
         RemoteTodo.replicate(
-          LocalTodo,
           since.pull,
+          LocalTodo,
           function pulled(err, conflicts, cps) {
             since.pull = cps;
             if (cb) cb();
