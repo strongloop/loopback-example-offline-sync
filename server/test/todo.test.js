@@ -92,8 +92,9 @@ describe('Todo', function() {
 
       // Delete the created todo
       lt.describe.whenCalledRemotely('DELETE', '/api/Todos/123', function() {
-        it('should respond with status 204 - todo:123 deleted', function() {
-          assert.equal(this.res.statusCode, 204);
+        it('should respond with status 200 - todo:123 deleted', function() {
+          assert.equal(this.res.statusCode, 200);
+          assert.equal(this.res.body.count, 1);
         });
 
         // Try to find it -- should return not found
