@@ -69,7 +69,7 @@
     "async": "~0.9.0",
     "compression": "^1.0.9",
     "cors": "^2.7.1",
-    "loopback": "^2.22.0",
+    "loopback": "^2.25.0",
     "loopback-boot": "^2.12.1",
     "loopback-connector-mongodb": "^1.4.1",
     "loopback-datasource-juggler": "^2.0.0",
