@@ -1,6 +1,6 @@
 'use strict';
 
-var lt = require('loopback-testing');
+var lt = require('./helpers/loopback-testing-helpers');
 var assert = require('assert');
 var app = require('../server.js'); //path to app.js or server.js
 
