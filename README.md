@@ -164,3 +164,7 @@ the server, the new route cannot be added using the yeoman generator.
       }
     }
     ```
+
+---
+
+[More LoopBack examples](https://github.com/strongloop/loopback-example)
