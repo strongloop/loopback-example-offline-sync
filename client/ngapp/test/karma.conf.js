@@ -1,3 +1,8 @@
+// Copyright IBM Corp. 2014,2015. All Rights Reserved.
+// Node module: loopback-example-offline-sync
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
 // Karma configuration
 // http://karma-runner.github.io/0.12/config/configuration-file.html
 // Generated on 2014-06-23 using
