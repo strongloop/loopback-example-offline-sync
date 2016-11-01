@@ -83,7 +83,7 @@ full-stack example:
 
 ## Adding more features
 
-#### Define a new shared model
+### Define a new shared model
 
 The instructions assume the name of the new model is 'MyModel'.
 
