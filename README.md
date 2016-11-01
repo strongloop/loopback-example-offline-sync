@@ -137,7 +137,7 @@ The instructions assume the name of the new model is 'MyModel'.
       .value('MyModel', app.models.LocalMyModel)
     ```
 
-## Create a new Angular route
+### Create a new Angular route
 
 Since the full-stack example project shares the routes between the client and
 the server, the new route cannot be added using the yeoman generator.
