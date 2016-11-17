@@ -1,7 +1,5 @@
 # loopback-example-offline-sync
 
-**Note: This example uses `loopback@2.0.0` and `loopback-boot@2.0.0`!**
-
 An example running LoopBack in the browser and server, demonstrating the
 following features:
 
